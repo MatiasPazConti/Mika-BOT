@@ -49,7 +49,7 @@ module.exports = async (client, member) => {
   });
 
   let embed = new EmbedBuilder()
-    .setTitle(`¡Bienvenido/a ${member.user.name}!`)
+    .setTitle(`¡Bienvenido/a ${member.user.tag}!`)
     .setDescription(
       `¡Bienvenido/a ${member}, soy <@1108378229439483945>!\n` +
         "Junto a mis colegas y <@810176824343789628>, mi creador, te deseamos una linda estadía. " +

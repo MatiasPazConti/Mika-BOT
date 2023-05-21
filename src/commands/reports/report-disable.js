@@ -1,5 +1,5 @@
 const { Client, Interaction, PermissionFlagsBits } = require("discord.js");
-const Reports = require("../../models/Reports");
+const Report = require("../../models/Report");
 
 /**
  * @param {Client} client
@@ -7,14 +7,24 @@ const Reports = require("../../models/Reports");
  */
 module.exports = {
   name: "report-disable",
-  description: "Descripción",
+  description: "Deshabilita el canal de reportes y el comando '/report'.",
   permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.SendMessages],
 
   callback: async (client, interaction) => {
     if (!interaction.inGuild()) {
       interaction.reply({
-        content: "You can only run this command inside a server.",
+        content: "Este comando solo puede usarse en servidores.",
+        ephemeral: true,
+      });
+      return;
+    }
+
+    if (
+      !interaction.member.permissions.has(PermissionFlagsBits.Administrator)
+    ) {
+      interaction.reply({
+        content: "No tienes los permisos suficientes para usar este comando.",
         ephemeral: true,
       });
       return;
@@ -23,17 +33,17 @@ module.exports = {
     try {
       await interaction.deferReply();
 
-      const reports = await Reports.findOne({
+      const report = await Report.findOne({
         guildId: interaction.guild.id,
       });
 
-      if (reports?.reportsEnabled) {
-        reports.reportsEnabled = false;
-        reports.save();
+      if (report?.enabled) {
+        report.enabled = false;
+        report.save();
 
         interaction.editReply({
           content:
-            "Reports has been disabled. To set a new report channel run '/report-set-channel'.",
+            "Se han desabilitado los reportes. Para asignar un nuevo canal de reportes use '/report-set-channel'.",
           ephemeral: true,
         });
         return;
@@ -41,11 +51,11 @@ module.exports = {
 
       interaction.editReply({
         content:
-          "Reports has already been disabled. To set a new report channel run '/report-set-channel'.",
+          "Los reportes ya están deshabilitados. Para asignar un nuevo canal de reportes use '/report-set-channel'",
         ephemeral: true,
       });
     } catch (error) {
-      console.log(`There was an error disabling the reports:\n${error}`);
+      console.log(`Hubo un error deshabilitando los reportes:\n${error}`);
     }
   },
 };

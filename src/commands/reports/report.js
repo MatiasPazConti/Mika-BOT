@@ -67,13 +67,12 @@ module.exports = {
 
       const embed = new EmbedBuilder()
         .setTitle(`REPORT#${reportId}`)
-        .addFields({
-          name: `Motivo: ${interaction.options.get("motivo").value}`,
-          value: `Se reporta a: <@${
+        .setDescription(
+          `**Se reporta a**: <@${
             interaction.options.get("usuario").user.id
-          }>`,
-        })
-        .setColor(0x00ffff);
+          }>\n**Motivo**: ${interaction.options.get("motivo").value}`
+        )
+        .setColor("#F2C4DE");
 
       client.channels.cache
         .get(report.notificationChannelId)

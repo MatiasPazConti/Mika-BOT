@@ -1,23 +1,23 @@
 const {
-  Client,
-  Interaction,
   PermissionFlagsBits,
   ApplicationCommandOptionType,
 } = require("discord.js");
 const YouTubeNotify = require("../../models/YouTubeNotify");
 
-/**
- * @param {Client} client
- * @param {Interaction} interaction
- */
 module.exports = {
-  name: "youtube-notify",
-  description: "Configure your YouTube notifications for this channel.",
+  name: "notify-youtube-add",
+  description: "En desarrollo.",
   options: [
     {
-      name: "youtube_id",
-      description: "The ID of the YouTube channel you want to notify.",
+      name: "id",
+      description: "ID del canal de YouTube.",
       type: ApplicationCommandOptionType.String,
+      required: true,
+    },
+    {
+      name: "canal",
+      description: "Canal donde se notificará la actividad.",
+      type: ApplicationCommandOptionType.Channel,
       required: true,
     },
   ],
@@ -33,7 +33,9 @@ module.exports = {
       return;
     }
 
-    const youtubeId = interaction.options.get("youtube_id").value;
+    const youtubeId = interaction.options.get("id").value;
+    const channelId = interaction.options.get("canal").value;
+    return;
 
     try {
       await interaction.deferReply();

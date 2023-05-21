@@ -1,18 +1,18 @@
 const { Schema, model } = require("mongoose");
 
-const reportsSchema = new Schema({
+const reportSchema = new Schema({
+  enabled: {
+    type: Boolean,
+    required: true,
+    unique: true,
+  },
   guildId: {
     type: String,
     required: true,
     unique: true,
   },
-  discordChannelId: {
+  notificationChannelId: {
     type: String,
-    required: true,
-    unique: true,
-  },
-  reportsEnabled: {
-    type: Boolean,
     required: true,
     unique: true,
   },
@@ -23,4 +23,4 @@ const reportsSchema = new Schema({
   },
 });
 
-module.exports = model("Reports", reportsSchema);
+module.exports = model("Report", reportSchema);

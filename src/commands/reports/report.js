@@ -1,30 +1,37 @@
 const {
-  Client,
-  Interaction,
   PermissionFlagsBits,
   ApplicationCommandOptionType,
   EmbedBuilder,
 } = require("discord.js");
-const Reports = require("../../models/Reports");
-const idConvert = require("../../utils/idConvert");
+const Report = require("../../models/Report");
 
-/**
- * @param {Client} client
- * @param {Interaction} interaction
- */
+const convertId = (value) => {
+  let id = value.toString();
+  if (value < 10) {
+    id = `0000${id}`;
+  } else if (value < 100) {
+    id = `000${id}`;
+  } else if (value < 1000) {
+    id = `00${id}`;
+  } else if (value < 10000) {
+    id = `0${id}`;
+  }
+  return id;
+};
+
 module.exports = {
   name: "report",
   description: "Descripción",
   options: [
     {
-      name: "offender",
-      description: "Descripción",
+      name: "usuario",
+      description: "Usuario a reportar.",
       type: ApplicationCommandOptionType.User,
       required: true,
     },
     {
-      name: "reason",
-      description: "Descripción",
+      name: "motivo",
+      description: "Causa por la que se le está reportando.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
@@ -35,7 +42,7 @@ module.exports = {
   callback: async (client, interaction) => {
     if (!interaction.inGuild()) {
       interaction.reply({
-        content: "You can only run this command inside a server.",
+        content: "Este comando solo puede usarse en servidores.",
         ephemeral: true,
       });
       return;
@@ -44,32 +51,40 @@ module.exports = {
     try {
       await interaction.deferReply();
 
-      let reports = await Reports.findOne({
+      let report = await Report.findOne({
         guildId: interaction.guild.id,
       });
 
-      const reportId = idConvert(reports.reportId);
+      if (!report?.enabled) {
+        interaction.editReply({
+          content: "El comando se encuentra deshabilitado para este servidor.",
+          ephemeral: true,
+        });
+        return;
+      }
+
+      const reportId = convertId(report.reportId);
 
       const embed = new EmbedBuilder()
         .setTitle(`REPORT#${reportId}`)
         .addFields({
-          name: `Motivo: ${interaction.options.get("reason").value}`,
+          name: `Motivo: ${interaction.options.get("motivo").value}`,
           value: `Se reporta a: <@${
-            interaction.options.get("offender").user.id
+            interaction.options.get("usuario").user.id
           }>`,
         })
         .setColor(0x00ffff);
 
       client.channels.cache
-        .get(reports.discordChannelId)
+        .get(report.notificationChannelId)
         .send({ embeds: [embed] });
 
-      reports.reportId = reports.reportId + 1;
-      reports.save();
+      report.reportId = report.reportId + 1;
+      report.save();
 
       await interaction.deleteReply();
     } catch (error) {
-      console.log(`There was an error sending the report:\n${error}`);
+      console.log(`Hubo un error enviando el reporte:\n${error}`);
     }
   },
 };

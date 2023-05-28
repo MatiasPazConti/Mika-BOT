@@ -50,7 +50,8 @@ module.exports = {
           content:
             `Las notificaciones para este canal de YouTube ya han sido asignadas a <#${youtubeNotification.discordChannelId}>.\n` +
             "Para mover el canal de notificaciones de Discord use '/notify-youtube-move'.\n" +
-            "Para dejar de notificar las publicaciones de este canal de YouTube use '/notify-youtube-remove'.",
+            "Para dejar de notificar las publicaciones de este canal de YouTube use '/notify-youtube-remove'.\n" +
+            "Para registrar un nuevo canal de notificaciones use '/notify-youtube-add'.",
           ephemeral: true,
         });
         return;
@@ -68,7 +69,8 @@ module.exports = {
         content:
           `Se ha registrado exitosamente el nuevo canal de notificaciones en <#${youtubeNotification.discordChannelId}>.\n` +
           "Para mover el canal de notificaciones de Discord use '/notify-youtube-move'.\n" +
-          "Para dejar de notificar las publicaciones de este canal de YouTube use '/notify-youtube-remove'.",
+          "Para dejar de notificar las publicaciones de este canal de YouTube use '/notify-youtube-remove'.\n" +
+          "Para registrar un nuevo canal de notificaciones use '/notify-youtube-add'.",
         ephemeral: true,
       });
       return;

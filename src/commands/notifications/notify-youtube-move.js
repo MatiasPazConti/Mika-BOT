@@ -50,8 +50,9 @@ module.exports = {
           interaction.editReply({
             content:
               `Las notificaciones de este canal de YouTube ya habían sido asignadas a <#${youtubeNotification.discordChannelId}> previamente.\n` +
-              "Para volver a mover el canal de notificaciones de Discord use '/notify-youtube-move'.\n" +
-              "Para dejar de notificar las publicaciones de este canal de YouTube use '/notify-youtube-remove'.",
+              "Para volver a intentar mover el canal de notificaciones de Discord use '/notify-youtube-move'.\n" +
+              "Para dejar de notificar las publicaciones de este canal de YouTube use '/notify-youtube-remove'.\n" +
+              "Para registrar un nuevo canal de notificaciones use '/notify-youtube-add'.",
             ephemeral: true,
           });
           return;
@@ -64,7 +65,8 @@ module.exports = {
           content:
             `Se ha movido exitosamente el canal de notificaciones a <#${youtubeNotification.discordChannelId}>.\n` +
             "Para volver a mover el canal de notificaciones de Discord use '/notify-youtube-move'.\n" +
-            "Para dejar de notificar las publicaciones de este canal de YouTube use '/notify-youtube-remove'.",
+            "Para dejar de notificar las publicaciones de este canal de YouTube use '/notify-youtube-remove'.\n" +
+            "Para registrar un nuevo canal de notificaciones use '/notify-youtube-add'.",
           ephemeral: true,
         });
         return;
@@ -72,7 +74,7 @@ module.exports = {
 
       interaction.editReply({
         content:
-          `Lo siento, este canal de YouTube no está registrado.\n` +
+          "Lo siento, este canal de YouTube no está registrado.\n" +
           "Para registrar un nuevo canal de notificaciones use '/notify-youtube-add'\n",
         ephemeral: true,
       });

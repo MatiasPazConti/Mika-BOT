@@ -41,6 +41,7 @@ module.exports = {
       await interaction.deferReply();
 
       let youtubeNotification = await YoutubeNotification.findOne({
+        guildId: interaction.guild.id,
         youtubeChannelId: youtubeId,
       });
 

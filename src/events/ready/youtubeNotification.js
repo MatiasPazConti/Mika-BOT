@@ -71,5 +71,5 @@ module.exports = async (client, interaction) => {
     }
 
     guildIds.length = 0;
-  }, 300000);
+  }, 1200000); //20 minutos = 1.200.000
 };

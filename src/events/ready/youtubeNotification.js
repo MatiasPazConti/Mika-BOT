@@ -27,13 +27,23 @@ const getChannelInfo = async (channelId) => {
 module.exports = async (client, interaction) => {
   setInterval(async () => {
     const guildIds = client.guilds.cache.map((guild) => guild.id);
+
+    if (guildIds.length === 0) {
+      console.error(
+        "YouTubeNotify: La función no se ha configurado para ningún servidor."
+      );
+      return;
+    }
+
     for (const guildId of guildIds) {
       const youtubeNotification = await YoutubeNotification.findOne({
         guildId: guildId,
       });
 
       if (!youtubeNotification) {
-        console.log("YoutubeNotify: Este canal no se ha registrado.");
+        console.log(
+          `YouTubeNotify: La función no se ha configurado para el servidor ${guildId}`
+        );
         return;
       }
 
@@ -41,24 +51,21 @@ module.exports = async (client, interaction) => {
         youtubeNotification.youtubeChannelId
       );
 
-      if (
-        !youtubeNotification.lastPostedVideoId ||
-        channelInfo.latestVideoId !== youtubeNotification.latestVideoId
-      ) {
+      if (channelInfo.latestVideoId !== youtubeNotification.latestVideoId) {
         client.channels.cache
           .get(youtubeNotification.discordChannelId)
           .send(
-            `**${channelInfo.channelName}** subió un nuevo video!\n` +
-              `https://www.youtube.com/watch?v=${channelInfo.latestVideoId}`
+            `**${channelInfo.channelName}** subió un nuevo video!` +
+              `\nhttps://www.youtube.com/watch?v=${channelInfo.latestVideoId}`
           );
 
         youtubeNotification.latestVideoId = channelInfo.latestVideoId;
         await youtubeNotification.save();
 
-        console.log("YoutubeNotify: Notificación exitosa!");
+        console.log("YouTubeNotify: Notificación exitosa!");
       } else {
         console.log(
-          "YoutubeNotify: La notification ya se había realizado anteriormente."
+          "YouTubeNotify: La notification ya se había realizado anteriormente."
         );
       }
     }

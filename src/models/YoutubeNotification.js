@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const youtubeNotifySchema = new Schema({
+const youtubeNotificationSchema = new Schema({
   guildId: {
     type: String,
     required: true,
@@ -16,10 +16,10 @@ const youtubeNotifySchema = new Schema({
     required: true,
     unique: true,
   },
-  lastPostedVideoId: {
+  latestVideoId: {
     type: String,
     unique: true,
   },
 });
 
-module.exports = model("YouTubeNotifications", youtubeNotifySchema);
+module.exports = model("YoutubeNotification", youtubeNotificationSchema);

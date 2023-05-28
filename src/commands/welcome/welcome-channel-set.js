@@ -11,7 +11,7 @@ module.exports = {
   description: "Asigna el canal de auto-mensajes de bienvenida.",
   options: [
     {
-      name: "channel",
+      name: "canal",
       description: "Canal donde se enviarán los mensajes de bienvenida.",
       type: ApplicationCommandOptionType.Channel,
       required: true,

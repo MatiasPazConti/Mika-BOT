@@ -27,7 +27,16 @@ const getWelcomeCanvas = async () => {
 };
 
 module.exports = async (client, member) => {
-  const channelId = "1108058697512517674";
+  let welcome = await Welcome.findOne({
+    guildId: member.guild.id,
+  });
+
+  if (!welcome) {
+    console.log("No se ha registrado un canal de auto-mensajes de bienvneida.");
+    return;
+  }
+
+  const channelId = welcome.discordChannelId;
 
   let canvas = await getWelcomeCanvas();
   let context = canvas.context;
@@ -48,8 +57,9 @@ module.exports = async (client, member) => {
     name: `welcome-${member.id}.png`,
   });
 
+  const userTag = member.user.tag.split("#");
   let embed = new EmbedBuilder()
-    .setTitle(`¡Bienvenido/a ${member.user.tag}!`)
+    .setTitle(`¡Bienvenido/a ${userTag[0]}!`)
     .setDescription(
       `¡Bienvenido/a ${member}, soy <@1108378229439483945>!\n` +
         "Junto a mis colegas y <@810176824343789628>, mi creador, te deseamos una linda estadía. " +

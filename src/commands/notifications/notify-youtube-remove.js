@@ -16,7 +16,7 @@ module.exports = {
       required: true,
     },
   ],
-  permissionsRequired: [PermissionFlagsBits.SendMessages],
+  permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.SendMessages],
 
   callback: async (client, interaction) => {

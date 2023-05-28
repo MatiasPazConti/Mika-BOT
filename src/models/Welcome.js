@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const autoWelcomeSchema = new Schema({
+const welcomeSchema = new Schema({
   guildId: {
     type: String,
     required: true,
@@ -13,4 +13,4 @@ const autoWelcomeSchema = new Schema({
   },
 });
 
-module.exports = model("AutoWelcome", autoWelcomeSchema);
+module.exports = model("Welcome", welcomeSchema);

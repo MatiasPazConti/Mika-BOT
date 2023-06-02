@@ -11,6 +11,11 @@ const welcomeSchema = new Schema({
     required: true,
     unique: true,
   },
+  welcomeMessage: {
+    type: String,
+    required: false,
+    unique: true,
+  },
 });
 
 module.exports = model("Welcome", welcomeSchema);

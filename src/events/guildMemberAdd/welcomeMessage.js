@@ -1,6 +1,6 @@
 const { AttachmentBuilder, EmbedBuilder } = require("discord.js");
 const Canvas = require("canvas");
-//const Welcome = require("../../models/Welcome");
+const Welcome = require("../../models/Welcome");
 
 const getWelcomeCanvas = async () => {
   let welcomeCanvas = {};
@@ -32,11 +32,18 @@ module.exports = async (client, member) => {
   });
 
   if (!welcome) {
-    console.log("No se ha registrado un canal de auto-mensajes de bienvneida.");
+    console.log("No se ha registrado un canal de auto-mensajes de bienvenida.");
     return;
   }
 
-  const channelId = welcome.discordChannelId;
+  let welcomeMsg = `¡Bienvenido/a ${member}, soy <@1108378229439483945>!`;
+  if (welcome.welcomeMessage) {
+    welcomeMsg = `${welcomeMsg}\n${welcome.welcomeMessage}`;
+  } else {
+    welcomeMsg =
+      `${welcomeMsg}\n` +
+      "Por favor, asegúrate de haber leído correctamente todas nuestras normas, y por cualquier consulta no dudes en comunicarte con nuestro staff.";
+  }
 
   let canvas = await getWelcomeCanvas();
   let context = canvas.context;
@@ -47,6 +54,7 @@ module.exports = async (client, member) => {
   context.arc(512, 166, 119, 0, Math.PI * 2, true);
   context.closePath();
   context.clip();
+
   await Canvas.loadImage(
     member.user.displayAvatarURL({ extension: "png", size: 1024 })
   ).then(async (img) => {
@@ -60,17 +68,12 @@ module.exports = async (client, member) => {
   const userTag = member.user.tag.split("#");
   let embed = new EmbedBuilder()
     .setTitle(`¡Bienvenido/a ${userTag[0]}!`)
-    .setDescription(
-      `¡Bienvenido/a ${member}, soy <@1108378229439483945>!\n` +
-        "Junto a mis colegas y <@810176824343789628>, mi creador, te deseamos una linda estadía. " +
-        "Por favor, asegúrate de haber leído correctamente todas nuestras normas, " +
-        "y por cualquier consulta no dudes en comunicarte con nuestro staff."
-    )
+    .setDescription(welcomeMsg)
     .setColor("#F2C4DE")
     .setImage(`attachment://welcome-${member.id}.png`);
 
   try {
-    client.channels.cache.get(channelId).send({
+    client.channels.cache.get(welcome.discordChannelId).send({
       embeds: [embed],
       files: [attachment],
     });

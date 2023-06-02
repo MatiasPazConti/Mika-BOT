@@ -5,9 +5,9 @@ const {
 const YoutubeNotification = require("../../models/YoutubeNotification");
 
 module.exports = {
-  name: "notify-youtube-add",
+  name: "notify-youtube-move",
   description:
-    "Registra un nuevo canal de YouTube para que se notifiquen sus publicaciones.",
+    "Modifica un canal de notificaciones que haya sido registrado previamente.",
   options: [
     {
       name: "id",
@@ -46,38 +46,37 @@ module.exports = {
       });
 
       if (youtubeNotification) {
+        if (youtubeNotification.discordChannelId === channelId) {
+          interaction.editReply({
+            content: `Las notificaciones para el canal de YouTube **${youtubeId}** ya están asignadas a <#${youtubeNotification.discordChannelId}>.`,
+            ephemeral: true,
+          });
+          return;
+        }
+
+        youtubeNotification.discordChannelId = channelId;
+        await youtubeNotification.save();
+
         interaction.editReply({
           content:
-            `Las notificaciones para este canal de YouTube ya han sido asignadas a <#${youtubeNotification.discordChannelId}>.\n` +
-            "Para mover el canal de notificaciones de Discord use '/notify-youtube-move'.\n" +
-            "Para dejar de notificar las publicaciones de este canal de YouTube use '/notify-youtube-remove'.\n" +
-            "Para registrar un nuevo canal de notificaciones use '/notify-youtube-add'.",
+            "Se ha modificado exitosamente el canal de notificaciones.\n" +
+            `Las notificaciones para el canal de Youtube **${youtubeId}** se realizarán en <#${channelId}>.`,
           ephemeral: true,
         });
         return;
       }
 
-      youtubeNotification = new YoutubeNotification({
-        guildId: interaction.guild.id,
-        discordChannelId: channelId,
-        youtubeChannelId: youtubeId,
-        latestVideoId: "",
-      });
-
-      await youtubeNotification.save();
       interaction.editReply({
         content:
-          `Se ha registrado exitosamente el nuevo canal de notificaciones en <#${youtubeNotification.discordChannelId}>.\n` +
-          "Para mover el canal de notificaciones de Discord use '/notify-youtube-move'.\n" +
-          "Para dejar de notificar las publicaciones de este canal de YouTube use '/notify-youtube-remove'.\n" +
-          "Para registrar un nuevo canal de notificaciones use '/notify-youtube-add'.",
+          `Lo siento, el canal YouTube **${youtubeId}** no se encuentra registrado en mi base de datos.\n` +
+          "Para registrarlo, use el comando **/notify-youtube-add**.",
         ephemeral: true,
       });
-      return;
     } catch (error) {
       console.error(
-        `Hubo un error con el comando '/notify-youtube-add':\n${error}`
+        `Hubo un error con el comando: /notify-youtube-move\n${error}`
       );
     }
+    return;
   },
 };

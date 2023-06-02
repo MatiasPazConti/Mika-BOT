@@ -18,6 +18,17 @@ const youtubeNotificationSchema = new Schema({
   },
   latestVideoId: {
     type: String,
+    required: false,
+    unique: true,
+  },
+  tagRoleId: {
+    type: String,
+    required: false,
+    unique: true,
+  },
+  messageContent: {
+    type: String,
+    required: false,
     unique: true,
   },
 });

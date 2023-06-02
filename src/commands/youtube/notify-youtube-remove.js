@@ -22,7 +22,7 @@ module.exports = {
   callback: async (client, interaction) => {
     if (!interaction.inGuild()) {
       interaction.reply({
-        content: "You can only run this command inside a server.",
+        content: "Lo siento, este comando solo puede usarse en servidores.",
         ephemeral: true,
       });
       return;
@@ -41,8 +41,8 @@ module.exports = {
       if (youtubeNotification) {
         interaction.editReply({
           content:
-            "Se han quitado las notificaciones para este canal de YouTube.\n" +
-            "Para registrar un nuevo canal de notificaciones use '/notify-youtube-add'.",
+            `Se ha borrado el canal de Youtube **${youtubeId}** de la base de datos.\n` +
+            "Para volver a registrarlo, use el comando **/notify-youtube-add**.",
           ephemeral: true,
         });
         return;
@@ -50,13 +50,13 @@ module.exports = {
 
       interaction.editReply({
         content:
-          "Lo siento, este canal de YouTube no está registrado.\n" +
-          "Para registrar un nuevo canal de notificaciones use '/notify-youtube-add'\n",
+          `Lo siento, el canal YouTube **${youtubeId}** no se encuentra registrado en mi base de datos.\n` +
+          "Para registrarlo, use el comando **/notify-youtube-add**.",
         ephemeral: true,
       });
     } catch (error) {
       console.error(
-        `Hubo un error con el comando '/notify-youtube-remove':\n${error}`
+        `Hubo un error con el comando: /notify-youtube-remove\n${error}`
       );
     }
     return;

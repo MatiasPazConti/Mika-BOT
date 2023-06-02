@@ -3,23 +3,21 @@ const YoutubeNotification = require("../../models/YoutubeNotification");
 const { google } = require("googleapis");
 const Youtube = google.youtube("v3");
 
-const getChannelInfo = async (channelId) => {
+const getLatestVideoId = async (channelId) => {
   try {
-    const res = await Youtube.search.list({
+    const response = await Youtube.search.list({
       key: process.env.YOUTUBE_TOKEN,
-      part: "id, snippet",
+      part: "id",
       channelId: channelId,
-      maxResults: 1,
+      type: "video",
       order: "date",
+      maxResults: 1,
     });
 
-    const latestVideoId = res.data.items[0].id.videoId;
-    const channelName = res.data.items[0].snippet.channelTitle;
-
-    return { channelName, latestVideoId };
-  } catch (err) {
+    return response.data.items[0].id.videoId;
+  } catch (error) {
     console.error(
-      `YoutubeNotify: Hubo un error intentando acceder a la información del canal:\n${err}`
+      `YoutubeNotify: Hubo un error intentando acceder a la información del canal:\n${error}`
     );
   }
 };
@@ -36,38 +34,57 @@ module.exports = async (client, interaction) => {
     }
 
     for (const guildId of guildIds) {
-      const youtubeNotification = await YoutubeNotification.findOne({
+      const youtubeNotifications = await YoutubeNotification.find({
         guildId: guildId,
       });
 
-      if (!youtubeNotification) {
+      if (youtubeNotifications.length === 0) {
         console.log(
           `YouTubeNotify: La función no se ha configurado para el servidor ${guildId}`
         );
         return;
       }
 
-      const channelInfo = await getChannelInfo(
-        youtubeNotification.youtubeChannelId
-      );
+      for (const youtubeNotification of youtubeNotifications) {
+        const latestVideoId = await getLatestVideoId(
+          youtubeNotification.youtubeChannelId
+        );
 
-      if (channelInfo.latestVideoId !== youtubeNotification.latestVideoId) {
+        if (!youtubeNotification.latestVideoId) {
+          console.log(
+            `YouTubeNotify: No se pudo obtener el ID del último video del canal ${youtubeNotification.youtubeChannelId}`
+          );
+          return;
+        }
+
+        if (youtubeNotification.latestVideoId === latestVideoId) {
+          console.log(
+            "YouTubeNotify: La notification ya se había realizado anteriormente."
+          );
+          return;
+        }
+
+        let notificationMsg = "¡Nuevo video!";
+        if (youtubeNotification.messageContent) {
+          notificationMsg = youtubeNotification.messageContent;
+        }
+
+        if (youtubeNotification.tagRoleId) {
+          notificationMsg = `<@&${youtubeNotification.tagRoleId}> ${notificationMsg}`;
+        }
+
+        notificationMsg = `${notificationMsg}\nhttps://www.youtube.com/watch?v=${latestVideoId}`;
         client.channels.cache
           .get(youtubeNotification.discordChannelId)
-          .send(
-            `**${channelInfo.channelName}** subió un nuevo video!` +
-              `\nhttps://www.youtube.com/watch?v=${channelInfo.latestVideoId}`
-          );
+          .send(notificationMsg);
 
-        youtubeNotification.latestVideoId = channelInfo.latestVideoId;
+        youtubeNotification.latestVideoId = latestVideoId;
         await youtubeNotification.save();
 
         console.log("YouTubeNotify: Notificación exitosa!");
-      } else {
-        console.log(
-          "YouTubeNotify: La notification ya se había realizado anteriormente."
-        );
       }
+
+      youtubeNotifications.length = 0;
     }
 
     guildIds.length = 0;

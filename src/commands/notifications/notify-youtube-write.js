@@ -5,13 +5,19 @@ const {
 const YoutubeNotification = require("../../models/YoutubeNotification");
 
 module.exports = {
-  name: "notify-youtube-remove",
+  name: "notify-youtube-write",
   description:
-    "Elimina un canal de notificaciones que haya sido registrado previamente. [En desarrollo]",
+    "Registra un nuevo canal de YouTube para que se notifiquen sus publicaciones.",
   options: [
     {
       name: "id",
       description: "ID del canal de YouTube.",
+      type: ApplicationCommandOptionType.String,
+      required: true,
+    },
+    {
+      name: "mensaje",
+      description: "Mensaje personalizado que se usará en la notificación.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
@@ -29,20 +35,24 @@ module.exports = {
     }
 
     const youtubeId = interaction.options.get("id").value;
+    const msgContent = interaction.options.get("mensaje").value;
 
     try {
       await interaction.deferReply();
 
-      let youtubeNotification = await YoutubeNotification.findOneAndRemove({
+      let youtubeNotification = await YoutubeNotification.findOne({
         guildId: interaction.guild.id,
         youtubeChannelId: youtubeId,
       });
 
       if (youtubeNotification) {
+        youtubeNotification.messageContent = msgContent;
+        await youtubeNotification.save();
+
         interaction.editReply({
           content:
-            `Se ha borrado el canal de Youtube **${youtubeId}** de la base de datos.\n` +
-            "Para volver a registrarlo, use el comando **/notify-youtube-add**.",
+            `Se ha modificado exitosamente el mensaje de las notificaciones del canal de YouTube **${youtubeId}** como:\n` +
+            `${msgContent}`,
           ephemeral: true,
         });
         return;
@@ -56,9 +66,8 @@ module.exports = {
       });
     } catch (error) {
       console.error(
-        `Hubo un error con el comando: /notify-youtube-remove\n${error}`
+        `Hubo un error con el comando: /notify-youtube-write\n${error}`
       );
     }
-    return;
   },
 };

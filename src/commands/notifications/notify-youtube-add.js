@@ -17,7 +17,7 @@ module.exports = {
     },
     {
       name: "canal",
-      description: "Canal donde se notificará la actividad.",
+      description: "Canal donde se realizarán las notificaciones.",
       type: ApplicationCommandOptionType.Channel,
       required: true,
     },
@@ -48,10 +48,8 @@ module.exports = {
       if (youtubeNotification) {
         interaction.editReply({
           content:
-            `Las notificaciones para este canal de YouTube ya han sido asignadas a <#${youtubeNotification.discordChannelId}>.\n` +
-            "Para mover el canal de notificaciones de Discord use '/notify-youtube-move'.\n" +
-            "Para dejar de notificar las publicaciones de este canal de YouTube use '/notify-youtube-remove'.\n" +
-            "Para registrar un nuevo canal de notificaciones use '/notify-youtube-add'.",
+            `Las notificaciones para el canal de YouTube **${youtubeId}** ya están asignadas a <#${youtubeNotification.discordChannelId}>.\n` +
+            "Para mover el canal de notificaciones de Discord, use el comando **/notify-youtube-move**.\n",
           ephemeral: true,
         });
         return;
@@ -61,22 +59,18 @@ module.exports = {
         guildId: interaction.guild.id,
         discordChannelId: channelId,
         youtubeChannelId: youtubeId,
-        latestVideoId: "",
       });
-
       await youtubeNotification.save();
+
       interaction.editReply({
         content:
-          `Se ha registrado exitosamente el nuevo canal de notificaciones en <#${youtubeNotification.discordChannelId}>.\n` +
-          "Para mover el canal de notificaciones de Discord use '/notify-youtube-move'.\n" +
-          "Para dejar de notificar las publicaciones de este canal de YouTube use '/notify-youtube-remove'.\n" +
-          "Para registrar un nuevo canal de notificaciones use '/notify-youtube-add'.",
+          `Se ha registrado exitosamente el canal de Youtube **${youtubeId}**.\n` +
+          `Las notificaciones se realizarán en <#${channelId}>.`,
         ephemeral: true,
       });
-      return;
     } catch (error) {
       console.error(
-        `Hubo un error con el comando '/notify-youtube-add':\n${error}`
+        `Hubo un error con el comando: /notify-youtube-add\n${error}`
       );
     }
   },

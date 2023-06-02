@@ -5,14 +5,20 @@ const {
 const YoutubeNotification = require("../../models/YoutubeNotification");
 
 module.exports = {
-  name: "notify-youtube-remove",
+  name: "notify-youtube-tag",
   description:
-    "Elimina un canal de notificaciones que haya sido registrado previamente. [En desarrollo]",
+    "Registra un nuevo canal de YouTube para que se notifiquen sus publicaciones.",
   options: [
     {
       name: "id",
       description: "ID del canal de YouTube.",
       type: ApplicationCommandOptionType.String,
+      required: true,
+    },
+    {
+      name: "rol",
+      description: "Rol que se mencionará en el mensaje de notificación.",
+      type: ApplicationCommandOptionType.Role,
       required: true,
     },
   ],
@@ -29,20 +35,32 @@ module.exports = {
     }
 
     const youtubeId = interaction.options.get("id").value;
+    const roleId = interaction.options.get("rol").value;
 
     try {
       await interaction.deferReply();
 
-      let youtubeNotification = await YoutubeNotification.findOneAndRemove({
+      let youtubeNotification = await YoutubeNotification.findOne({
         guildId: interaction.guild.id,
         youtubeChannelId: youtubeId,
       });
 
       if (youtubeNotification) {
+        if (youtubeNotification.tagRoleId) {
+          if (youtubeNotification.tagRoleId === roleId) {
+            interaction.editReply({
+              content: `El rol <@&${roleId}> ya estaba asignado como rol de notificaciones del canal de YouTube **${youtubeId}**`,
+              ephemeral: true,
+            });
+            return;
+          }
+        }
+
+        youtubeNotification.tagRoleId = roleId;
+        await youtubeNotification.save();
+
         interaction.editReply({
-          content:
-            `Se ha borrado el canal de Youtube **${youtubeId}** de la base de datos.\n` +
-            "Para volver a registrarlo, use el comando **/notify-youtube-add**.",
+          content: `Se ha asignado exitosamente el rol <@&${roleId}> como rol de notificaciones del canal de YouTube **${youtubeId}**.`,
           ephemeral: true,
         });
         return;
@@ -56,9 +74,8 @@ module.exports = {
       });
     } catch (error) {
       console.error(
-        `Hubo un error con el comando: /notify-youtube-remove\n${error}`
+        `Hubo un error con el comando: /notify-youtube-tag\n${error}`
       );
     }
-    return;
   },
 };

@@ -5,7 +5,7 @@ const {
 const YoutubeNotification = require("../../models/YoutubeNotification");
 
 module.exports = {
-  name: "notify-youtube-write",
+  name: "notify-youtube-message",
   description:
     "Registra un nuevo canal de YouTube para que se notifiquen sus publicaciones.",
   options: [
@@ -65,9 +65,7 @@ module.exports = {
         ephemeral: true,
       });
     } catch (error) {
-      console.error(
-        `Hubo un error con el comando: /notify-youtube-write\n${error}`
-      );
+      console.error(`Hubo un error con el comando: /welcome-message\n${error}`);
     }
   },
 };

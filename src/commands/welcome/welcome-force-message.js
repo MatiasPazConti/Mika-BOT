@@ -2,13 +2,22 @@ const {
   AttachmentBuilder,
   EmbedBuilder,
   PermissionFlagsBits,
+  ApplicationCommandOptionType,
 } = require("discord.js");
 const getWelcomeCanvas = require("../../utils/getWelcomeCanvas");
 const Welcome = require("../../models/Welcome");
 
 module.exports = {
-  name: "test-welcome-message",
-  description: "[DEV-Only] Realiza un mensaje de bienvenida.",
+  name: "welcome-force-message",
+  description: "Raliza un mensaje de bienvenida al usuario seleccionado.",
+  options: [
+    {
+      name: "usuario",
+      description: "Usuario destinatario.",
+      type: ApplicationCommandOptionType.User,
+      required: true,
+    },
+  ],
   permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.SendMessages],
 
@@ -16,7 +25,7 @@ module.exports = {
     interaction.deferReply();
     interaction.deleteReply();
 
-    const member = interaction.member;
+    const member = interaction.options.get("usuario").member;
 
     let welcome = await Welcome.findOne({
       guildId: member.guild.id,

@@ -23,12 +23,6 @@ module.exports = async (client, member) => {
 
   let canvas = await getWelcomeCanvas(member);
 
-  await Canvas.loadImage(
-    member.user.displayAvatarURL({ extension: "png", size: 1024 })
-  ).then(async (img) => {
-    context.drawImage(img, 393, 47, 238, 238);
-  });
-
   let attachment = new AttachmentBuilder(canvas.create.toBuffer(), {
     name: `welcome-${member.id}.png`,
   });

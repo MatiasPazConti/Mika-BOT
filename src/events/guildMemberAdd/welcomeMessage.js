@@ -1,30 +1,6 @@
 const { AttachmentBuilder, EmbedBuilder } = require("discord.js");
-const Canvas = require("canvas");
+const getWelcomeCanvas = require("../../utils/getWelcomeCanvas");
 const Welcome = require("../../models/Welcome");
-
-const getWelcomeCanvas = async () => {
-  let welcomeCanvas = {};
-  welcomeCanvas.create = Canvas.createCanvas(1024, 500);
-
-  let context = (welcomeCanvas.context = welcomeCanvas.create.getContext("2d"));
-  context.font = "72px sans-serif";
-  context.textAlign = "center";
-  context.strokeStyle = "#323277";
-  context.fillStyle = "#ffffff";
-
-  const imgFolder = `${__dirname}/../../assets/img`;
-  await Canvas.loadImage(`${imgFolder}/mikaWelcome.png`).then(async (img) => {
-    context.drawImage(img, 0, -38, 1024, 576);
-    context.strokeText("¡BIENVENIDO!", 512, 360);
-    context.fillText("¡BIENVENIDO!", 512, 360);
-    context.beginPath();
-    context.arc(512, 166, 128, 0, Math.PI * 2, true);
-    context.stroke();
-    context.fill();
-  });
-
-  return welcomeCanvas;
-};
 
 module.exports = async (client, member) => {
   let welcome = await Welcome.findOne({
@@ -45,15 +21,7 @@ module.exports = async (client, member) => {
       "Por favor, asegúrate de haber leído correctamente todas nuestras normas, y por cualquier consulta no dudes en comunicarte con nuestro staff.";
   }
 
-  let canvas = await getWelcomeCanvas();
-  let context = canvas.context;
-  context.font = "42px sans-serif";
-  context.strokeText(member.user.tag, 512, 410);
-  context.fillText(member.user.tag, 512, 410);
-  context.beginPath();
-  context.arc(512, 166, 119, 0, Math.PI * 2, true);
-  context.closePath();
-  context.clip();
+  let canvas = await getWelcomeCanvas(member);
 
   await Canvas.loadImage(
     member.user.displayAvatarURL({ extension: "png", size: 1024 })

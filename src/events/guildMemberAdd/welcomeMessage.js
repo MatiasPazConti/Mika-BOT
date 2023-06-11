@@ -2,12 +2,16 @@ const { AttachmentBuilder, EmbedBuilder } = require("discord.js");
 const Canvas = require("canvas");
 const Welcome = require("../../models/Welcome");
 
+registerFont(`${__dirname}/../../assets/font/ArialTh.tth`, {
+  family: "ArialTh",
+});
+
 const getWelcomeCanvas = async () => {
   let welcomeCanvas = {};
   welcomeCanvas.create = Canvas.createCanvas(1024, 500);
 
   let context = (welcomeCanvas.context = welcomeCanvas.create.getContext("2d"));
-  context.font = "72px sans-serif";
+  context.font = "72px ArialTh";
   context.textAlign = "center";
   context.strokeStyle = "#323277";
   context.fillStyle = "#ffffff";
@@ -47,7 +51,7 @@ module.exports = async (client, member) => {
 
   let canvas = await getWelcomeCanvas();
   let context = canvas.context;
-  context.font = "42px sans-serif";
+  context.font = "42px ArialTh";
   context.strokeText(member.user.tag, 512, 410);
   context.fillText(member.user.tag, 512, 410);
   context.beginPath();

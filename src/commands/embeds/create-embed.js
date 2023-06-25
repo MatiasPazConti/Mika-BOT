@@ -22,8 +22,7 @@ module.exports = {
     },
     {
       name: "descripción",
-      description:
-        "Ingrese la descripción del Embed. [Salto de Línea = /n/][Tabulación = /t/]",
+      description: "Ingrese la descripción del Embed.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
@@ -75,24 +74,9 @@ module.exports = {
       const embedThumbnail = interaction.options.get("thumbnail");
       const embedFooter = interaction.options.get("footer");
 
-      let convertedDescription = "";
-      const jumpArray = embedDescription.split("/n/");
-      for (let jump = 0; jump <= jumpArray.length; jump++) {
-        if (jump > 0) {
-          convertedDescription = convertedDescription + "\n";
-        }
-        let tabArray = jumpArray[jump].split("/t/");
-        for (let tab = 0; tab <= tabArray.length; tab++) {
-          if (tab > 0) {
-            convertedDescription = convertedDescription + "\t";
-          }
-          convertedDescription = convertedDescription + tabArray[tab];
-        }
-      }
-
       const embed = new EmbedBuilder()
         .setTitle(embedTitle)
-        .setDescription(convertedDescription)
+        .setDescription(embedDescription)
         .setColor(embedColor)
         .setImage(embedImage)
         .setThumbnail(embedThumbnail)

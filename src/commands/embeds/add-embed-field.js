@@ -28,8 +28,7 @@ module.exports = {
     },
     {
       name: "descripción",
-      description:
-        "Ingrese la descripción de la nueva sección. [Salto de Línea = /n/][Tabulación = /t/]",
+      description: "Ingrese la descripción de la nueva sección.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
@@ -54,24 +53,10 @@ module.exports = {
       const fieldTitle = interaction.options.get("título");
       const fieldDescription = interaction.options.get("descripción");
 
-      let convertedDescription = "";
-      const jumpArray = fieldDescription.split("/n/");
-      for (let jump = 0; jump <= jumpArray.length; jump++) {
-        if (jump > 0) {
-          convertedDescription = convertedDescription + "\n";
-        }
-        let tabArray = jumpArray[jump].split("/t/");
-        for (let tab = 0; tab <= tabArray.length; tab++) {
-          if (tab > 0) {
-            convertedDescription = convertedDescription + "\t";
-          }
-          convertedDescription = convertedDescription + tabArray[tab];
-        }
-      }
       const channel = client.channels.cache.get(channelId);
       const message = await channel.messages.fetch(messageId);
       const embed = message.embeds[0];
-      embed.addField(fieldTitle, convertedDescription);
+      embed.addField(fieldTitle, fieldDescription);
 
       message.edit({ embeds: [embed] });
 

@@ -75,7 +75,7 @@ module.exports = {
         });
       }
 
-      client.channels.cache.get(channelId).send({ embeds: [embed] });
+      client.channels.cache.get(channelId).send({ embeds: [newEmbed] });
 
       await interaction.deleteReply();
     } catch (error) {

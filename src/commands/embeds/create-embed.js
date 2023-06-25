@@ -57,12 +57,12 @@ module.exports = {
       const embedFooter = interaction.options.get("footer")?.value || "";
 
       let newDescription = "";
-      const nArray = embedDescription.toString().split("\n");
+      const nArray = embedDescription.toString().split("/n ");
       for (let n = 0; n < nArray.length; ++n) {
         if (n > 0) {
           newDescription = newDescription + "\n";
         }
-        const tArray = nArray[n].split("\t");
+        const tArray = nArray[n].split("/t ");
         for (let t = 0; t < tArray.length; ++t) {
           if (t > 0) {
             newDescription = newDescription + "\t";

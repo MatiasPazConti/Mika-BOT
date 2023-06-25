@@ -53,12 +53,21 @@ module.exports = {
       const fieldTitle = interaction.options.get("título").value;
       const fieldDescription = interaction.options.get("descripción").value;
 
+      let newDescription = "";
+      const nArray = fieldDescription.toString().split("/n ");
+      for (let n = 0; n < nArray.length; ++n) {
+        if (n > 0) {
+          newDescription = newDescription + "\n";
+        }
+        newDescription = newDescription + nArray[n];
+      }
+
       const channel = client.channels.cache.get(channelId);
       const message = await channel.messages.fetch(messageId);
-      const embed = message.embeds[0];
-      embed.addField(fieldTitle, fieldDescription.toString());
+      const msgEmbed = message.embeds[0];
+      msgEmbed.addField(fieldTitle, newDescription);
 
-      message.edit({ embeds: [embed] });
+      message.edit({ embeds: [msgEmbed] });
 
       await interaction.deleteReply();
     } catch (error) {

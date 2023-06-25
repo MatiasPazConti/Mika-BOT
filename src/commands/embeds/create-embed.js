@@ -62,13 +62,7 @@ module.exports = {
         if (n > 0) {
           newDescription = newDescription + "\n";
         }
-        const tArray = nArray[n].split("/t ");
-        for (let t = 0; t < tArray.length; ++t) {
-          if (t > 0) {
-            newDescription = newDescription + "\t";
-          }
-          newDescription = newDescription + tArray[t];
-        }
+        newDescription = newDescription + nArray[n];
       }
 
       const newEmbed = new EmbedBuilder()

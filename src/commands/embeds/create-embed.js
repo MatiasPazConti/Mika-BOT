@@ -56,9 +56,24 @@ module.exports = {
       const embedThumbnail = interaction.options.get("thumbnail")?.value || "";
       const embedFooter = interaction.options.get("footer")?.value || "";
 
+      let newDescription = "";
+      const nArray = embedDescription.toString().split("\n");
+      for (let n = 0; n < nArray.length; ++n) {
+        if (n > 0) {
+          newDescription = newDescription + "\n";
+        }
+        const tArray = nArray[n].split("\t");
+        for (let t = 0; t < tArray.length; ++t) {
+          if (t > 0) {
+            newDescription = newDescription + "\t";
+          }
+          newDescription = newDescription + tArray[t];
+        }
+      }
+
       const newEmbed = new EmbedBuilder()
         .setTitle(embedTitle)
-        .setDescription(embedDescription.toString())
+        .setDescription(newDescription)
         .setColor(`${embedColor}`)
         .setTimestamp();
 

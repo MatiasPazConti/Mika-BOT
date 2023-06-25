@@ -49,15 +49,31 @@ module.exports = {
       await interaction.deferReply();
 
       const channelId = interaction.options.get("canal").value;
-      const embedTitle = interaction.options.get("título");
-      const embedDescription = interaction.options.get("descripción");
-      const embedColor = interaction.options.get("color") || "#F2C4DE";
+      const embedTitle = interaction.options.get("título").value;
+      const embedDescription = interaction.options.get("descripción").value;
+      const embedColor = interaction.options.get("color").value || "#F2C4DE";
+      const embedImage = interaction.options.get("imagen").value || "";
+      const embedThumbnail = interaction.options.get("thumbnail").value || "";
+      const embedFooter = interaction.options.get("footer").value || "";
 
       const newEmbed = new EmbedBuilder()
         .setTitle(embedTitle)
         .setDescription(embedDescription)
         .setColor(`${embedColor}`)
         .setTimestamp();
+
+      if (embedImage) {
+        newEmbed.setImage(embedImage);
+      }
+      if (embedThumbnail) {
+        newEmbed.setThumbnail(`${embedThumbnail}`);
+      }
+      if (embedFooter) {
+        newEmbed.setFooter({
+          text: `${embedFooter}`,
+          iconURL: interaction.member.displayAvatarURL({ dynamic: true }),
+        });
+      }
 
       client.channels.cache.get(channelId).send({ embeds: [embed] });
 

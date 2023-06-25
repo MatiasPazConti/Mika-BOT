@@ -49,9 +49,9 @@ module.exports = {
       await interaction.deferReply();
 
       const channelId = interaction.options.get("canal").value;
-      const messageId = interaction.options.get("mensaje");
-      const fieldTitle = interaction.options.get("título");
-      const fieldDescription = interaction.options.get("descripción");
+      const messageId = interaction.options.get("mensaje").value;
+      const fieldTitle = interaction.options.get("título").value;
+      const fieldDescription = interaction.options.get("descripción").value;
 
       const channel = client.channels.cache.get(channelId);
       const message = await channel.messages.fetch(messageId);

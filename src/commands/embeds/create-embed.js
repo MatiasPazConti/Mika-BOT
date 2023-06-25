@@ -70,9 +70,9 @@ module.exports = {
       const embedTitle = interaction.options.get("título");
       const embedDescription = interaction.options.get("descripción");
       const embedColor = interaction.options.get("color") || "#F2C4DE";
-      const embedImage = interaction.options.get("imagen");
-      const embedThumbnail = interaction.options.get("thumbnail");
-      const embedFooter = interaction.options.get("footer");
+      const embedImage = interaction.options.get("imagen") || "";
+      const embedThumbnail = interaction.options.get("thumbnail") || "";
+      const embedFooter = interaction.options.get("footer") || "";
 
       const embed = new EmbedBuilder()
         .setTitle(embedTitle)

@@ -77,9 +77,9 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setTitle(embedTitle)
         .setDescription(embedDescription)
-        .setColor(embedColor)
-        .setImage(embedImage)
-        .setThumbnail(embedThumbnail)
+        .setColor(`${embedColor}`)
+        .setImage(`${embedImage}`)
+        .setThumbnail(`${embedThumbnail}`)
         .setTimestamp()
         .setFooter({
           text: `${embedFooter}`,

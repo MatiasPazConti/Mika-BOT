@@ -74,17 +74,24 @@ module.exports = {
       const embedThumbnail = interaction.options.get("thumbnail") || "";
       const embedFooter = interaction.options.get("footer") || "";
 
-      const embed = new EmbedBuilder()
+      const newEmbed = new EmbedBuilder()
         .setTitle(embedTitle)
         .setDescription(embedDescription)
         .setColor(`${embedColor}`)
-        .setImage(`${embedImage}`)
-        .setThumbnail(`${embedThumbnail}`)
-        .setTimestamp()
-        .setFooter({
+        .setTimestamp();
+
+      if (embedImage) {
+        newEmbed.setImage(embedImage);
+      }
+      if (embedThumbnail) {
+        newEmbed.setThumbnail(`${embedThumbnail}`);
+      }
+      if (embedFooter) {
+        newEmbed.setFooter({
           text: `${embedFooter}`,
           iconURL: interaction.member.displayAvatarURL({ dynamic: true }),
         });
+      }
 
       client.channels.cache.get(channelId).send({ embeds: [embed] });
 

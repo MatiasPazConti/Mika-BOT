@@ -51,10 +51,10 @@ module.exports = {
       const channelId = interaction.options.get("canal").value;
       const embedTitle = interaction.options.get("título").value;
       const embedDescription = interaction.options.get("descripción").value;
-      const embedColor = interaction.options.get("color").value || "#F2C4DE";
-      const embedImage = interaction.options.get("imagen").value || "";
-      const embedThumbnail = interaction.options.get("thumbnail").value || "";
-      const embedFooter = interaction.options.get("footer").value || "";
+      const embedColor = interaction.options.get("color")?.value || "#F2C4DE";
+      const embedImage = interaction.options.get("imagen")?.value || "";
+      const embedThumbnail = interaction.options.get("thumbnail")?.value || "";
+      const embedFooter = interaction.options.get("footer")?.value || "";
 
       const newEmbed = new EmbedBuilder()
         .setTitle(embedTitle)

@@ -23,8 +23,7 @@ module.exports = {
     {
       name: "descripción",
       description:
-        "Ingrese la descripción del Embed.\n" +
-        "Nota: Para hacer Saltos de Línea use /n/ y para hacer Tabulaciones use /t/.",
+        "Ingrese la descripción del Embed. [Salto de Línea = /n/][Tabulación = /t/]",
       type: ApplicationCommandOptionType.String,
       required: true,
     },

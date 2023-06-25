@@ -29,8 +29,7 @@ module.exports = {
     {
       name: "descripción",
       description:
-        "Ingrese la descripción de la nueva sección.\n" +
-        "Nota: Para hacer Saltos de Línea use /n/ y para hacer Tabulaciones use /t/",
+        "Ingrese la descripción de la nueva sección. [Salto de Línea = /n/][Tabulación = /t/]",
       type: ApplicationCommandOptionType.String,
       required: true,
     },

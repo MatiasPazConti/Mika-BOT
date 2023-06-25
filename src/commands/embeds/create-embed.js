@@ -32,24 +32,6 @@ module.exports = {
       type: ApplicationCommandOptionType.String,
       required: false,
     },
-    {
-      name: "imagen",
-      description: "Ingrese la dirección de la imagen que añadirá al Embed.",
-      type: ApplicationCommandOptionType.String,
-      required: false,
-    },
-    {
-      name: "thumbnail",
-      description: "Ingrese la dirección del thumbnail que añadirá al Embed.",
-      type: ApplicationCommandOptionType.String,
-      required: false,
-    },
-    {
-      name: "footer",
-      description: "Ingrese la nota del footer del Embed.",
-      type: ApplicationCommandOptionType.String,
-      required: false,
-    },
   ],
   permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.SendMessages],
@@ -70,28 +52,12 @@ module.exports = {
       const embedTitle = interaction.options.get("título");
       const embedDescription = interaction.options.get("descripción");
       const embedColor = interaction.options.get("color") || "#F2C4DE";
-      const embedImage = interaction.options.get("imagen") || "";
-      const embedThumbnail = interaction.options.get("thumbnail") || "";
-      const embedFooter = interaction.options.get("footer") || "";
 
       const newEmbed = new EmbedBuilder()
         .setTitle(embedTitle)
         .setDescription(embedDescription)
         .setColor(`${embedColor}`)
         .setTimestamp();
-
-      if (embedImage) {
-        newEmbed.setImage(embedImage);
-      }
-      if (embedThumbnail) {
-        newEmbed.setThumbnail(`${embedThumbnail}`);
-      }
-      if (embedFooter) {
-        newEmbed.setFooter({
-          text: `${embedFooter}`,
-          iconURL: interaction.member.displayAvatarURL({ dynamic: true }),
-        });
-      }
 
       client.channels.cache.get(channelId).send({ embeds: [embed] });
 

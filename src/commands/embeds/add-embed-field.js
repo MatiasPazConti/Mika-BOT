@@ -56,7 +56,7 @@ module.exports = {
       const channel = client.channels.cache.get(channelId);
       const message = await channel.messages.fetch(messageId);
       const embed = message.embeds[0];
-      embed.addField(fieldTitle, fieldDescription);
+      embed.addField(fieldTitle, fieldDescription.toString());
 
       message.edit({ embeds: [embed] });
 

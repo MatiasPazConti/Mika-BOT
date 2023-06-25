@@ -58,7 +58,7 @@ module.exports = {
 
       const newEmbed = new EmbedBuilder()
         .setTitle(embedTitle)
-        .setDescription(embedDescription)
+        .setDescription(`${embedDescription}`)
         .setColor(`${embedColor}`)
         .setTimestamp();
 

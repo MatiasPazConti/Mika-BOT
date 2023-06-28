@@ -5,7 +5,7 @@ const {
 const TwitchNotification = require("../../models/TwitchNotification");
 
 module.exports = {
-  name: "set-twitch-notifications-message",
+  name: "set-twitch-notifications-msg",
   description: "Asigna un nuevo mensaje de notificación.",
   options: [
     {

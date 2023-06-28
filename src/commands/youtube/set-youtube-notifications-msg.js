@@ -5,7 +5,7 @@ const {
 const YoutubeNotification = require("../../models/YoutubeNotification");
 
 module.exports = {
-  name: "set-youtube-notifications-message",
+  name: "set-youtube-notifications-msg",
   description: "Asigna un nuevo mensaje de notificación.",
   options: [
     {

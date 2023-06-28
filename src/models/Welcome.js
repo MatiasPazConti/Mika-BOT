@@ -14,7 +14,7 @@ const welcomeSchema = new Schema({
   welcomeMessage: {
     type: String,
     required: false,
-    unique: true,
+    unique: false,
   },
 });
 

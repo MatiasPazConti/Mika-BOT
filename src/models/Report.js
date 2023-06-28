@@ -4,7 +4,7 @@ const reportSchema = new Schema({
   enabled: {
     type: Boolean,
     required: true,
-    unique: true,
+    unique: false,
   },
   guildId: {
     type: String,
@@ -19,7 +19,7 @@ const reportSchema = new Schema({
   reportId: {
     type: Number,
     required: false,
-    unique: true,
+    unique: false,
   },
 });
 

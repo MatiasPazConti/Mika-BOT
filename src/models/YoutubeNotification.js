@@ -4,12 +4,12 @@ const youtubeNotificationSchema = new Schema({
   guildId: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
   },
   discordChannelId: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
   },
   youtubeChannelId: {
     type: String,
@@ -19,17 +19,17 @@ const youtubeNotificationSchema = new Schema({
   latestVideoId: {
     type: String,
     required: false,
-    unique: true,
+    unique: false,
   },
   tagRoleId: {
     type: String,
     required: false,
-    unique: true,
+    unique: false,
   },
   messageContent: {
     type: String,
     required: false,
-    unique: true,
+    unique: false,
   },
 });
 

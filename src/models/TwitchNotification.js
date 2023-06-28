@@ -4,12 +4,12 @@ const twitchNotificationSchema = new Schema({
   guildId: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
   },
   discordChannelId: {
     type: String,
     required: true,
-    unique: true,
+    unique: false,
   },
   twitchChannelId: {
     type: String,
@@ -19,17 +19,17 @@ const twitchNotificationSchema = new Schema({
   online: {
     type: Boolean,
     required: true,
-    unique: true,
+    unique: false,
   },
   tagRoleId: {
     type: String,
     required: false,
-    unique: true,
+    unique: false,
   },
   messageContent: {
     type: String,
     required: false,
-    unique: true,
+    unique: false,
   },
 });
 

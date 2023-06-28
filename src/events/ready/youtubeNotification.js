@@ -17,7 +17,7 @@ const getLatestVideoId = async (channelId) => {
     return response.data.items[0].id.videoId;
   } catch (error) {
     console.error(
-      `YoutubeNotify: Hubo un error intentando acceder a la información del canal:\n${error}`
+      `YouTube-Notifications: Hubo un error intentando acceder a la información del canal:\n${error}`
     );
   }
 };
@@ -28,7 +28,7 @@ module.exports = async (client, interaction) => {
 
     if (guildIds.length === 0) {
       console.error(
-        "YouTubeNotify: La función no se ha configurado para ningún servidor."
+        "YouTube-Notifications: La función no se ha configurado para ningún servidor."
       );
       return;
     }
@@ -40,7 +40,7 @@ module.exports = async (client, interaction) => {
 
       if (youtubeNotifications.length === 0) {
         console.log(
-          `YouTubeNotify: La función no se ha configurado para el servidor ${guildId}`
+          `YouTube-Notifications: La función no se ha configurado para el servidor ${guildId}`
         );
         return;
       }
@@ -52,15 +52,12 @@ module.exports = async (client, interaction) => {
 
         if (!youtubeNotification.latestVideoId) {
           console.log(
-            `YouTubeNotify: No se pudo obtener el ID del último video del canal ${youtubeNotification.youtubeChannelId}`
+            `YouTube-Notifications: No se pudo obtener el ID del último video del canal ${youtubeNotification.youtubeChannelId}`
           );
           return;
         }
 
         if (youtubeNotification.latestVideoId === latestVideoId) {
-          console.log(
-            "YouTubeNotify: La notification ya se había realizado anteriormente."
-          );
           return;
         }
 
@@ -80,8 +77,6 @@ module.exports = async (client, interaction) => {
 
         youtubeNotification.latestVideoId = latestVideoId;
         await youtubeNotification.save();
-
-        console.log("YouTubeNotify: Notificación exitosa!");
       }
 
       youtubeNotifications.length = 0;

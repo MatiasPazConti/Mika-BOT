@@ -2,16 +2,16 @@ const {
   PermissionFlagsBits,
   ApplicationCommandOptionType,
 } = require("discord.js");
-const YoutubeNotification = require("../../models/YoutubeNotification");
+const TwitchNotification = require("../../models/TwitchNotification");
 
 module.exports = {
-  name: "notify-youtube-remove",
+  name: "remove-twitch-notifications",
   description:
-    "Elimina un canal de notificaciones que haya sido registrado previamente. [En desarrollo]",
+    "Deshabilita las notificaciones de un canal que haya sido registrado previamente.",
   options: [
     {
       name: "id",
-      description: "ID del canal de YouTube.",
+      description: "ID del canal de Twitch.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
@@ -28,21 +28,21 @@ module.exports = {
       return;
     }
 
-    const youtubeId = interaction.options.get("id").value;
+    const twitchId = interaction.options.get("id").value;
 
     try {
       await interaction.deferReply();
 
-      let youtubeNotification = await YoutubeNotification.findOneAndRemove({
+      let twitchNotification = await TwitchNotification.findOneAndRemove({
         guildId: interaction.guild.id,
-        youtubeChannelId: youtubeId,
+        twitchChannelId: twitchId,
       });
 
-      if (youtubeNotification) {
+      if (twitchNotification) {
         interaction.editReply({
           content:
-            `Se ha borrado el canal de Youtube **${youtubeId}** de la base de datos.\n` +
-            "Para volver a registrarlo, use el comando **/notify-youtube-add**.",
+            `Se han deshabilitado las notificaciones de Twitch de **${twitchId}**.\n` +
+            "Para rehabilitarlo, use el comando ``/add-twitch-notifications``.",
           ephemeral: true,
         });
         return;
@@ -50,13 +50,13 @@ module.exports = {
 
       interaction.editReply({
         content:
-          `Lo siento, el canal YouTube **${youtubeId}** no se encuentra registrado en mi base de datos.\n` +
-          "Para registrarlo, use el comando **/notify-youtube-add**.",
+          `Lo siento, el canal Twitch **${twitchId}** no se encuentra registrado en mi base de datos.\n` +
+          "Para registrarlo, use el comando ``/add-twitch-notifications``.",
         ephemeral: true,
       });
     } catch (error) {
       console.error(
-        `Hubo un error con el comando: /notify-youtube-remove\n${error}`
+        `Hubo un error con el comando: /remove-twitch-notifications\n${error}`
       );
     }
     return;

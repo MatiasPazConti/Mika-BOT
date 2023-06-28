@@ -43,9 +43,6 @@ const isChannelOnline = async (channelId) => {
       },
     });
     const { data } = response.data;
-    if (data.length !== 0) {
-      console.log(data);
-    }
     return data.length !== 0;
   } catch (error) {
     console.error(
@@ -108,26 +105,24 @@ module.exports = {
               twitchNotification.online = false;
               twitchNotification.save();
             }
-            interaction.deleteReply();
-            return;
+          } else {
+            let notificationMsg = "¡Nuevo directo!";
+            if (twitchNotification.messageContent) {
+              notificationMsg = twitchNotification.messageContent;
+            }
+
+            if (twitchNotification.tagRoleId) {
+              notificationMsg = `<@&${twitchNotification.tagRoleId}> ${notificationMsg}`;
+            }
+
+            notificationMsg = `${notificationMsg}\nhttps://www.twitch.tv/${twitchNotification.twitchChannelId}`;
+            client.channels.cache
+              .get(twitchNotification.discordChannelId)
+              .send(notificationMsg);
+
+            twitchNotification.online = true;
+            twitchNotification.save();
           }
-
-          let notificationMsg = "¡Nuevo directo!";
-          if (twitchNotification.messageContent) {
-            notificationMsg = twitchNotification.messageContent;
-          }
-
-          if (twitchNotification.tagRoleId) {
-            notificationMsg = `<@&${twitchNotification.tagRoleId}> ${notificationMsg}`;
-          }
-
-          notificationMsg = `${notificationMsg}\nhttps://www.twitch.tv/${twitchNotification.twitchChannelId}`;
-          client.channels.cache
-            .get(twitchNotification.discordChannelId)
-            .send(notificationMsg);
-
-          twitchNotification.online = true;
-          twitchNotification.save();
         }
 
         twitchNotifications.length = 0;

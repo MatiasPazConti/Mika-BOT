@@ -59,6 +59,7 @@ module.exports = {
         guildId: interaction.guild.id,
         discordChannelId: channelId,
         youtubeChannelId: youtubeId,
+        latestVideoId: "0",
       });
       await youtubeNotification.save();
 

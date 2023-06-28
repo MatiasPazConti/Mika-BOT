@@ -68,9 +68,6 @@ module.exports = async (client, interaction) => {
         client.channels.cache
           .get(twitchNotification.discordChannelId)
           .send(notificationMsg);
-
-        twitchNotification.latestVideoId = latestVideoId;
-        await twitchNotification.save();
       }
 
       twitchNotifications.length = 0;

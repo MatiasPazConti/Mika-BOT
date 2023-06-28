@@ -25,7 +25,7 @@ const getLatestVideoId = async (channelId) => {
 
 module.exports = {
   name: "test-youtube-notification",
-  description: "[DEV-Only]: Fuerza todas las notificaciones de YouTube.",
+  description: "[DEV]: Fuerza el evento READY: youtubeNotifications.",
   permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.SendMessages],
 

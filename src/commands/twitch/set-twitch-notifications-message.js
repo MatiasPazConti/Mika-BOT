@@ -2,22 +2,21 @@ const {
   PermissionFlagsBits,
   ApplicationCommandOptionType,
 } = require("discord.js");
-const YoutubeNotification = require("../../models/YoutubeNotification");
+const TwitchNotification = require("../../models/TwitchNotification");
 
 module.exports = {
-  name: "notify-youtube-message",
-  description:
-    "Registra un nuevo canal de YouTube para que se notifiquen sus publicaciones.",
+  name: "set-twitch-notifications-message",
+  description: "Asigna un nuevo mensaje de notificación.",
   options: [
     {
       name: "id",
-      description: "ID del canal de YouTube.",
+      description: "ID del canal de Twitch.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
     {
       name: "mensaje",
-      description: "Mensaje personalizado que se usará en la notificación.",
+      description: "Nuevo mensaje personalziado.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
@@ -34,24 +33,24 @@ module.exports = {
       return;
     }
 
-    const youtubeId = interaction.options.get("id").value;
+    const twitchId = interaction.options.get("id").value;
     const msgContent = interaction.options.get("mensaje").value;
 
     try {
       await interaction.deferReply();
 
-      let youtubeNotification = await YoutubeNotification.findOne({
+      let twitchNotification = await TwitchNotification.findOne({
         guildId: interaction.guild.id,
-        youtubeChannelId: youtubeId,
+        twitchChannelId: twitchId,
       });
 
-      if (youtubeNotification) {
-        youtubeNotification.messageContent = msgContent;
-        await youtubeNotification.save();
+      if (twitchNotification) {
+        twitchNotification.messageContent = msgContent;
+        await twitchNotification.save();
 
         interaction.editReply({
           content:
-            `Se ha modificado exitosamente el mensaje de las notificaciones del canal de YouTube **${youtubeId}** como:\n` +
+            `Se ha modificado exitosamente el mensaje de notifición de Twitch para **${twitchId}** como:\n` +
             `${msgContent}`,
           ephemeral: true,
         });
@@ -60,12 +59,14 @@ module.exports = {
 
       interaction.editReply({
         content:
-          `Lo siento, el canal YouTube **${youtubeId}** no se encuentra registrado en mi base de datos.\n` +
-          "Para registrarlo, use el comando **/notify-youtube-add**.",
+          `Lo siento, el canal Twitch **${twitchId}** no se encuentra registrado en mi base de datos.\n` +
+          "Para registrarlo, use el comando ``/add-twitch-notifications``.",
         ephemeral: true,
       });
     } catch (error) {
-      console.error(`Hubo un error con el comando: /welcome-message\n${error}`);
+      console.error(
+        `Hubo un error con el comando: /set-twitch-notifications-message\n${error}`
+      );
     }
   },
 };

@@ -77,27 +77,24 @@ module.exports = {
             return;
           }
 
-          if (youtubeNotification.latestVideoId === latestVideoId) {
-            interaction.deleteReply();
-            return;
+          if (youtubeNotification.latestVideoId !== latestVideoId) {
+            let notificationMsg = "¡Nuevo video!";
+            if (youtubeNotification.messageContent) {
+              notificationMsg = youtubeNotification.messageContent;
+            }
+
+            if (youtubeNotification.tagRoleId) {
+              notificationMsg = `<@&${youtubeNotification.tagRoleId}> ${notificationMsg}`;
+            }
+
+            notificationMsg = `${notificationMsg}\nhttps://www.youtube.com/watch?v=${latestVideoId}`;
+            client.channels.cache
+              .get(youtubeNotification.discordChannelId)
+              .send(notificationMsg);
+
+            youtubeNotification.latestVideoId = latestVideoId;
+            await youtubeNotification.save();
           }
-
-          let notificationMsg = "¡Nuevo video!";
-          if (youtubeNotification.messageContent) {
-            notificationMsg = youtubeNotification.messageContent;
-          }
-
-          if (youtubeNotification.tagRoleId) {
-            notificationMsg = `<@&${youtubeNotification.tagRoleId}> ${notificationMsg}`;
-          }
-
-          notificationMsg = `${notificationMsg}\nhttps://www.youtube.com/watch?v=${latestVideoId}`;
-          client.channels.cache
-            .get(youtubeNotification.discordChannelId)
-            .send(notificationMsg);
-
-          youtubeNotification.latestVideoId = latestVideoId;
-          await youtubeNotification.save();
         }
 
         youtubeNotifications.length = 0;

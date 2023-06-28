@@ -3,13 +3,43 @@ const { PermissionFlagsBits } = require("discord.js");
 const TwitchNotification = require("../../models/TwitchNotification");
 const axios = require("axios");
 
+const getTwitchAccess = async () => {
+  const tokenUrl = "https://id.twitch.tv/oauth2/token";
+  const params = new URLSearchParams({
+    grant_type: "client_credentials",
+    client_id: process.env.TWITCH_CLIENT_ID,
+    client_secret: process.env.TWITCH_CLIENT_SECRET,
+  });
+  try {
+    const response = await fetch(tokenUrl, {
+      method: "POST",
+      body: params,
+    });
+    const data = await response.json();
+    if (data.access_token) {
+      return data.access_token;
+    } else {
+      console.error("Hubo un error obteniendo el ACCESS_TOKEN:\n", error);
+      return data;
+    }
+  } catch {
+    (error) => {
+      console.error(
+        "Hubo un error intentando obtener el ACCESS_TOKEN:\n",
+        error
+      );
+    };
+  }
+};
+
 const isChannelOnline = async (channelId) => {
   const API_URL = `https://api.twitch.tv/helix/streams?user_login=${channelId}`;
   try {
+    const ACCESS_TOKEN = await getTwitchAccess();
     const response = await axios.get(API_URL, {
       headers: {
         "Client-ID": process.env.TWITCH_CLIENT_ID,
-        Authorization: process.env.TWITCH_ACCESS_TOKEN,
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
       },
     });
     const { data } = response.data;
@@ -74,6 +104,11 @@ module.exports = {
             console.log(
               `Twitch-Notifications: El canal ${twitchNotification.twitchChannelId} se encuentra Offline`
             );
+            if (twitchNotification.online) {
+              twitchNotification.online = false;
+              twitchNotification.save();
+            }
+            interaction.deleteReply();
             return;
           }
 
@@ -90,6 +125,9 @@ module.exports = {
           client.channels.cache
             .get(twitchNotification.discordChannelId)
             .send(notificationMsg);
+
+          twitchNotification.online = true;
+          twitchNotification.save();
         }
 
         twitchNotifications.length = 0;

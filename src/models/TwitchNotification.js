@@ -16,6 +16,11 @@ const twitchNotificationSchema = new Schema({
     required: true,
     unique: true,
   },
+  online: {
+    type: Boolean,
+    required: true,
+    unique: true,
+  },
   tagRoleId: {
     type: String,
     required: false,

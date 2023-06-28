@@ -59,6 +59,7 @@ module.exports = {
         guildId: interaction.guild.id,
         discordChannelId: channelId,
         twitchChannelId: twitchId,
+        online: false,
       });
       await twitchNotification.save();
 

@@ -5,20 +5,14 @@ const {
 const YoutubeNotification = require("../../models/YoutubeNotification");
 
 module.exports = {
-  name: "notify-youtube-move",
+  name: "remove-youtube-notifications",
   description:
-    "Modifica un canal de notificaciones que haya sido registrado previamente.",
+    "Deshabilita las notificaciones de un canal que haya sido registrado previamente.",
   options: [
     {
       name: "id",
       description: "ID del canal de YouTube.",
       type: ApplicationCommandOptionType.String,
-      required: true,
-    },
-    {
-      name: "canal",
-      description: "Canal donde se notificará la actividad.",
-      type: ApplicationCommandOptionType.Channel,
       required: true,
     },
   ],
@@ -35,32 +29,20 @@ module.exports = {
     }
 
     const youtubeId = interaction.options.get("id").value;
-    const channelId = interaction.options.get("canal").value;
 
     try {
       await interaction.deferReply();
 
-      let youtubeNotification = await YoutubeNotification.findOne({
+      let youtubeNotification = await YoutubeNotification.findOneAndRemove({
         guildId: interaction.guild.id,
         youtubeChannelId: youtubeId,
       });
 
       if (youtubeNotification) {
-        if (youtubeNotification.discordChannelId === channelId) {
-          interaction.editReply({
-            content: `Las notificaciones para el canal de YouTube **${youtubeId}** ya están asignadas a <#${youtubeNotification.discordChannelId}>.`,
-            ephemeral: true,
-          });
-          return;
-        }
-
-        youtubeNotification.discordChannelId = channelId;
-        await youtubeNotification.save();
-
         interaction.editReply({
           content:
-            "Se ha modificado exitosamente el canal de notificaciones.\n" +
-            `Las notificaciones para el canal de Youtube **${youtubeId}** se realizarán en <#${channelId}>.`,
+            `Se han deshabilitado las notificaciones de YouTube de **${youtubeId}**.\n` +
+            "Para rehabilitarlo, use el comando ``/add-youtube-notifications``.",
           ephemeral: true,
         });
         return;
@@ -69,12 +51,12 @@ module.exports = {
       interaction.editReply({
         content:
           `Lo siento, el canal YouTube **${youtubeId}** no se encuentra registrado en mi base de datos.\n` +
-          "Para registrarlo, use el comando **/notify-youtube-add**.",
+          "Para registrarlo, use el comando ``/add-youtube-notifications``.",
         ephemeral: true,
       });
     } catch (error) {
       console.error(
-        `Hubo un error con el comando: /notify-youtube-move\n${error}`
+        `Hubo un error con el comando: /remove-youtube-notifications\n${error}`
       );
     }
     return;

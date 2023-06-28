@@ -2,22 +2,22 @@ const {
   PermissionFlagsBits,
   ApplicationCommandOptionType,
 } = require("discord.js");
-const YoutubeNotification = require("../../models/YoutubeNotification");
+const TwitchNotification = require("../../models/TwitchNotification");
 
 module.exports = {
-  name: "notify-youtube-add",
+  name: "add-twitch-notifications",
   description:
-    "Registra un nuevo canal de YouTube para que se notifiquen sus publicaciones.",
+    "Registra un nuevo canal de Twitch para que se notifiquen sus publicaciones.",
   options: [
     {
       name: "id",
-      description: "ID del canal de YouTube.",
+      description: "ID del canal de Twitch.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
     {
       name: "canal",
-      description: "Canal donde se realizarán las notificaciones.",
+      description: "Canal donde se notificará.",
       type: ApplicationCommandOptionType.Channel,
       required: true,
     },
@@ -34,43 +34,44 @@ module.exports = {
       return;
     }
 
-    const youtubeId = interaction.options.get("id").value;
+    const twitchId = interaction.options.get("id").value;
     const channelId = interaction.options.get("canal").value;
 
     try {
       await interaction.deferReply();
 
-      let youtubeNotification = await YoutubeNotification.findOne({
+      let twitchNotification = await TwitchNotification.findOne({
         guildId: interaction.guild.id,
-        youtubeChannelId: youtubeId,
+        twitchChannelId: twitchId,
       });
 
-      if (youtubeNotification) {
+      if (twitchNotification) {
         interaction.editReply({
           content:
-            `Las notificaciones para el canal de YouTube **${youtubeId}** ya están asignadas a <#${youtubeNotification.discordChannelId}>.\n` +
-            "Para mover el canal de notificaciones de Discord, use el comando **/notify-youtube-move**.\n",
+            `Las notificaciones de Twitch para **${twitchId}** ya están asignadas a <#${twitchNotification.discordChannelId}>.\n` +
+            "Para mover el canal de notificaciones, use el comando ``/move-twitch-notifications``.\n",
           ephemeral: true,
         });
         return;
       }
 
-      youtubeNotification = new YoutubeNotification({
+      twitchNotification = new TwitchNotification({
         guildId: interaction.guild.id,
         discordChannelId: channelId,
-        youtubeChannelId: youtubeId,
+        twitchChannelId: twitchId,
+        online: false,
       });
-      await youtubeNotification.save();
+      await twitchNotification.save();
 
       interaction.editReply({
         content:
-          `Se ha registrado exitosamente el canal de Youtube **${youtubeId}**.\n` +
+          `Se ha registrado exitosamente el canal de Twitch: **${twitchId}**.\n` +
           `Las notificaciones se realizarán en <#${channelId}>.`,
         ephemeral: true,
       });
     } catch (error) {
       console.error(
-        `Hubo un error con el comando: /notify-youtube-add\n${error}`
+        `Hubo un error con el comando: /add-twitch-notifications\n${error}`
       );
     }
   },

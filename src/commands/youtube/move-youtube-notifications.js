@@ -5,9 +5,8 @@ const {
 const YoutubeNotification = require("../../models/YoutubeNotification");
 
 module.exports = {
-  name: "notify-youtube-tag",
-  description:
-    "Registra un nuevo canal de YouTube para que se notifiquen sus publicaciones.",
+  name: "move-youtube-notifications",
+  description: "Mueve las notificaciones a un nuevo canal de Discord.",
   options: [
     {
       name: "id",
@@ -16,9 +15,9 @@ module.exports = {
       required: true,
     },
     {
-      name: "rol",
-      description: "Rol que se mencionará en el mensaje de notificación.",
-      type: ApplicationCommandOptionType.Role,
+      name: "canal",
+      description: "Nuevo canal donde se notificará.",
+      type: ApplicationCommandOptionType.Channel,
       required: true,
     },
   ],
@@ -35,7 +34,7 @@ module.exports = {
     }
 
     const youtubeId = interaction.options.get("id").value;
-    const roleId = interaction.options.get("rol").value;
+    const channelId = interaction.options.get("canal").value;
 
     try {
       await interaction.deferReply();
@@ -46,21 +45,21 @@ module.exports = {
       });
 
       if (youtubeNotification) {
-        if (youtubeNotification.tagRoleId) {
-          if (youtubeNotification.tagRoleId === roleId) {
-            interaction.editReply({
-              content: `El rol <@&${roleId}> ya estaba asignado como rol de notificaciones del canal de YouTube **${youtubeId}**`,
-              ephemeral: true,
-            });
-            return;
-          }
+        if (youtubeNotification.discordChannelId === channelId) {
+          interaction.editReply({
+            content: `Las notificaciones de YouTube para **${youtubeId}** ya están asignadas a <#${youtubeNotification.discordChannelId}>.`,
+            ephemeral: true,
+          });
+          return;
         }
 
-        youtubeNotification.tagRoleId = roleId;
+        youtubeNotification.discordChannelId = channelId;
         await youtubeNotification.save();
 
         interaction.editReply({
-          content: `Se ha asignado exitosamente el rol <@&${roleId}> como rol de notificaciones del canal de YouTube **${youtubeId}**.`,
+          content:
+            "Se ha modificado exitosamente el canal de notificaciones.\n" +
+            `Las notificaciones de YouTube para **${youtubeId}** se realizarán en <#${channelId}>.`,
           ephemeral: true,
         });
         return;
@@ -69,13 +68,14 @@ module.exports = {
       interaction.editReply({
         content:
           `Lo siento, el canal YouTube **${youtubeId}** no se encuentra registrado en mi base de datos.\n` +
-          "Para registrarlo, use el comando **/notify-youtube-add**.",
+          "Para registrarlo, use el comando ``/add-youtube-notifications``.",
         ephemeral: true,
       });
     } catch (error) {
       console.error(
-        `Hubo un error con el comando: /notify-youtube-tag\n${error}`
+        `Hubo un error con el comando: /move-youtube-notifications\n${error}`
       );
     }
+    return;
   },
 };

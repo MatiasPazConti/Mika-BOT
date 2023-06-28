@@ -1,6 +1,6 @@
 const { Schema, model } = require("mongoose");
 
-const youtubeNotificationSchema = new Schema({
+const twitchNotificationSchema = new Schema({
   guildId: {
     type: String,
     required: true,
@@ -11,14 +11,14 @@ const youtubeNotificationSchema = new Schema({
     required: true,
     unique: false,
   },
-  youtubeChannelId: {
+  twitchChannelId: {
     type: String,
     required: true,
     unique: true,
   },
-  latestVideoId: {
-    type: String,
-    required: false,
+  online: {
+    type: Boolean,
+    required: true,
     unique: false,
   },
   tagRoleId: {
@@ -33,4 +33,4 @@ const youtubeNotificationSchema = new Schema({
   },
 });
 
-module.exports = model("YoutubeNotification", youtubeNotificationSchema);
+module.exports = model("TwitchNotification", twitchNotificationSchema);

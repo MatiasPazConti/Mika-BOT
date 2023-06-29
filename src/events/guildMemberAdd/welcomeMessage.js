@@ -32,11 +32,17 @@ const createBasicCanvas = async () => {
 };
 
 const createWelcomeCanvas = async (member) => {
+  const userTag = member.user.tag.split("#");
+  let canvasTag = userTag[0];
+  if (userTag[1] != "0") {
+    canvasTag = member.user.tag;
+  }
+
   let welcomeCanvas = await createBasicCanvas();
   let context = welcomeCanvas.context;
   context.font = "42px Arial Narrow";
-  context.strokeText(member.user.tag, 512, 410);
-  context.fillText(member.user.tag, 512, 410);
+  context.strokeText(canvasTag, 512, 410);
+  context.fillText(canvasTag, 512, 410);
   context.beginPath();
   context.arc(512, 166, 119, 0, Math.PI * 2, true);
   context.closePath();

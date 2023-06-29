@@ -43,8 +43,8 @@ module.exports = {
           interaction.editReply({
             content:
               `Los auto-mensajes de bienvenida ya habían sido asignados a <#${welcome.discordChannelId}> previamente.\n` +
-              "Para cambiar el canal de auto-mensajes vuelva a usar '/welcome-channel-set'.\n" +
-              "Para quitar los auto-mensajes de bienvenida use '/welcome-channel-remove'.",
+              "Para cambiar el canal de auto-mensajes vuelva a usar '/set-welcome-channel'.\n" +
+              "Para quitar los auto-mensajes de bienvenida use '/remove-welcome-channel'.",
             ephemeral: true,
           });
           return;
@@ -55,8 +55,8 @@ module.exports = {
         interaction.editReply({
           content:
             `Los auto-mensajes de bienvenida ya habían sido asignados a <#${welcome.discordChannelId}> previamente.\n` +
-            "Para cambiar el canal de auto-mensajes vuelva a usar '/welcome-channel-set'.\n" +
-            "Para quitar los auto-mensajes de bienvenida use '/welcome-channel-remove'.",
+            "Para cambiar el canal de auto-mensajes vuelva a usar '/set-welcome-channel'.\n" +
+            "Para quitar los auto-mensajes de bienvenida use '/remove-welcome-channel'.",
           ephemeral: true,
         });
         return;
@@ -71,13 +71,13 @@ module.exports = {
       interaction.editReply({
         content:
           `El nuevo canal auto-mensajes de bienvenida <#${channelId}> se ha configurado exitosamente.\n` +
-          "Para cambiar el canal de auto-mensajes vuelva a usar '/welcome-channel-set'.\n" +
-          "Para quitar los auto-mensajes de bienvenida use '/welcome-channel-remove'.",
+          "Para cambiar el canal de auto-mensajes vuelva a usar '/set-welcome-channel'.\n" +
+          "Para quitar los auto-mensajes de bienvenida use '/remove-welcome-channel'.",
         ephemeral: true,
       });
     } catch (error) {
       console.error(
-        `Hubo un error con el comando '/welcome-channel-set':\n${error}`
+        `Hubo un error con el comando '/set-welcome-channel':\n${error}`
       );
     }
   },

@@ -5,7 +5,7 @@ const {
   ApplicationCommandOptionType,
 } = require("discord.js");
 const Canvas = require("canvas");
-const Welcome = require("../../models/Welcome");
+const ServerBoost = require("../../models/ServerBoost");
 
 const assets = `${__dirname}/../../assets`;
 
@@ -25,8 +25,8 @@ const createBasicCanvas = async () => {
 
   await Canvas.loadImage(`${assets}/img/mikaWelcome.png`).then(async (img) => {
     context.drawImage(img, 0, -38, 1024, 576);
-    context.strokeText("¡BIENVENIDO!", 512, 360);
-    context.fillText("¡BIENVENIDO!", 512, 360);
+    context.strokeText("¡GRACIAS!", 512, 360);
+    context.fillText("¡GRACIAS!", 512, 360);
     context.beginPath();
     context.arc(512, 166, 128, 0, Math.PI * 2, true);
     context.stroke();
@@ -36,15 +36,15 @@ const createBasicCanvas = async () => {
   return newCanvas;
 };
 
-const createWelcomeCanvas = async (member) => {
+const createThanksCanvas = async (member) => {
   const userTag = member.user.tag.split("#");
   let canvasTag = userTag[0];
   if (userTag[1] != "0") {
     canvasTag = member.user.tag;
   }
 
-  let welcomeCanvas = await createBasicCanvas();
-  let context = welcomeCanvas.context;
+  let thanksCanvas = await createBasicCanvas();
+  let context = thanksCanvas.context;
   context.font = "42px Arial Narrow";
   context.strokeText(canvasTag, 512, 410);
   context.fillText(canvasTag, 512, 410);
@@ -59,12 +59,12 @@ const createWelcomeCanvas = async (member) => {
     context.drawImage(img, 393, 47, 238, 238);
   });
 
-  return welcomeCanvas;
+  return thanksCanvas;
 };
 
 module.exports = {
-  name: "force-welcome-message",
-  description: "Raliza un mensaje de bienvenida al usuario seleccionado.",
+  name: "force-boost-message",
+  description: "Raliza un mensaje de agradecimiento al usuario seleccionado.",
   options: [
     {
       name: "usuario",
@@ -82,46 +82,46 @@ module.exports = {
 
     const member = interaction.options.get("usuario").member;
 
-    let welcome = await Welcome.findOne({
+    let serverBoost = await ServerBoost.findOne({
       guildId: member.guild.id,
     });
 
-    if (!welcome) {
+    if (!serverBoost) {
       console.log(
-        "No se ha registrado un canal de auto-mensajes de bienvenida."
+        "No se ha registrado un canal de auto-mensajes de mejoras de servidor."
       );
       return;
     }
 
-    let welcomeMsg = `¡Bienvenido/a ${member}, soy <@1108378229439483945>!`;
-    if (welcome.welcomeMessage) {
-      welcomeMsg = `${welcomeMsg}\n${welcome.welcomeMessage}`;
-    } else {
-      welcomeMsg =
-        `${welcomeMsg}\n` +
-        "Por favor, asegúrate de haber leído correctamente todas nuestras normas, y por cualquier consulta no dudes en comunicarte con nuestro staff.";
-    }
+    console.log(member.premiumSince);
+    if (member.premiumSince) {
+      let thanksMsg = `¡Gracias por mejorar nuestro servidor!`;
+      if (serverBoost.thanksMessage) {
+        thanksMsg = `${serverBoost.thanksMessage}`;
+      }
 
-    let canvas = await createWelcomeCanvas(member);
+      let canvas = await createThanksCanvas(member);
 
-    let attachment = new AttachmentBuilder(canvas.create.toBuffer(), {
-      name: `welcome-${member.id}.png`,
-    });
-
-    const userTag = member.user.tag.split("#");
-    let embed = new EmbedBuilder()
-      .setTitle(`¡Bienvenido/a ${userTag[0]}!`)
-      .setDescription(welcomeMsg)
-      .setColor("#F2C4DE")
-      .setImage(`attachment://welcome-${member.id}.png`);
-
-    try {
-      client.channels.cache.get(welcome.discordChannelId).send({
-        embeds: [embed],
-        files: [attachment],
+      let attachment = new AttachmentBuilder(canvas.create.toBuffer(), {
+        name: `serverBoost-${member.id}.png`,
       });
-    } catch (error) {
-      console.log(`Hubo un error enviando el canvas:\n${error}`);
+
+      const userTag = member.user.tag.split("#");
+      let embed = new EmbedBuilder()
+        .setTitle(`¡Gracias ${userTag[0]}!`)
+        .setDescription(thanksMsg)
+        .setColor("#F2C4DE")
+        .setImage(`attachment://serverBoost-${member.id}.png`);
+
+      try {
+        client.channels.cache.get(serverBoost.discordChannelId).send({
+          content: `${member}`,
+          embeds: [embed],
+          files: [attachment],
+        });
+      } catch (error) {
+        console.log(`Hubo un error enviando el canvas:\n${error}`);
+      }
     }
   },
 };

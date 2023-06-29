@@ -7,7 +7,7 @@ const {
 const Welcome = require("../../models/Welcome");
 
 module.exports = {
-  name: "welcome-message-set",
+  name: "set-welcome-message",
   description: "Asigna el canal de auto-mensajes de bienvenida.",
   options: [
     {

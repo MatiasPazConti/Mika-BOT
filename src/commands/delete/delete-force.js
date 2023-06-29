@@ -1,5 +1,5 @@
 module.exports = {
-  name: "notify-youtube-add",
+  name: "welcome-force-message",
   description: "Ingresar en 'name' el nombre del comando a borrar.",
   deleted: true,
 

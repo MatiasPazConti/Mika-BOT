@@ -1,5 +1,5 @@
 module.exports = {
-  name: "notify-youtube-move",
+  name: "welcome-channel-set",
   description: "Ingresar en 'name' el nombre del comando a borrar.",
   deleted: true,
 

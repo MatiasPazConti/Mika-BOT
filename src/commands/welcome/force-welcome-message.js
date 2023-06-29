@@ -8,7 +8,7 @@ const getWelcomeCanvas = require("../../utils/getWelcomeCanvas");
 const Welcome = require("../../models/Welcome");
 
 module.exports = {
-  name: "welcome-force-message",
+  name: "force-welcome-message",
   description: "Raliza un mensaje de bienvenida al usuario seleccionado.",
   options: [
     {

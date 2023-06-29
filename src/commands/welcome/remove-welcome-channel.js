@@ -2,7 +2,7 @@ const { Client, Interaction, PermissionFlagsBits } = require("discord.js");
 const Welcome = require("../../models/Welcome");
 
 module.exports = {
-  name: "welcome-channel-remove",
+  name: "remove-welcome-channel",
   description: "Asigna el canal de auto-mensajes de bienvenida.",
   permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.SendMessages],

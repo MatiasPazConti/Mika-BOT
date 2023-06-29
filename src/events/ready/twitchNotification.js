@@ -89,7 +89,6 @@ module.exports = async (client, interaction) => {
             twitchNotification.online = false;
             twitchNotification.save();
           }
-          interaction.deleteReply();
           return;
         }
 

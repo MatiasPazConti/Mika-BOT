@@ -57,9 +57,7 @@ const createThanksCanvas = async (member) => {
   return thanksCanvas;
 };
 
-module.exports = async (client, member) => {
-  const oldMember = member.oldMember;
-  const newMember = member.newMember;
+module.exports = async (oldMember, newMember, client) => {
   let serverBoost = await ServerBoost.findOne({
     guildId: newMember.guild.id,
   });
@@ -91,7 +89,8 @@ module.exports = async (client, member) => {
       .setTitle(`¡Gracias ${userTag[0]}!`)
       .setDescription(thanksMsg)
       .setColor("#F2C4DE")
-      .setImage(`attachment://serverBoost-${newMember.id}.png`);
+      .setImage(`attachment://serverBoost-${newMember.id}.png`)
+      .setTimestamp();
 
     try {
       client.channels.cache.get(serverBoost.discordChannelId).send({

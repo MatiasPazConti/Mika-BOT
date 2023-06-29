@@ -8,7 +8,7 @@ const Welcome = require("../../models/Welcome");
 
 module.exports = {
   name: "set-welcome-message",
-  description: "Asigna el canal de auto-mensajes de bienvenida.",
+  description: "Modifica la descripción del auto-mensaje de bienvenida.",
   options: [
     {
       name: "mensaje",
@@ -21,7 +21,7 @@ module.exports = {
   permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.SendMessages],
 
-  callback: async (client, interaction) => {
+  callback: async (interaction, client) => {
     if (!interaction.inGuild()) {
       interaction.reply({
         content: "Lo siento, este comando solo puede usarse en servidores.",
@@ -45,7 +45,7 @@ module.exports = {
 
         interaction.editReply({
           content:
-            `Se ha modificado exitosamente el mensaje de los embeds de bienvenida a:\n` +
+            `Se ha modificado exitosamente el mensaje de bienvenida a:\n` +
             `¡Bienvenido/a ${interaction.member}, soy <@1108378229439483945>!\n` +
             `${welcomeMsg}`,
           ephemeral: true,
@@ -56,13 +56,13 @@ module.exports = {
       interaction.editReply({
         content:
           `Lo siento, no hay ningún canal de bienvenida registrado en mi base de datos.\n` +
-          "Para registrarlo, use el comando **/welcome-channel-set**.",
+          "Para registrarlo, use el comando ``/set-welcome-channel``.",
         ephemeral: true,
       });
       return;
     } catch (error) {
       console.error(
-        `Hubo un error con el comando '/welcome-message':\n${error}`
+        `Hubo un error con el comando '/set-welcome-message':\n${error}`
       );
     }
   },

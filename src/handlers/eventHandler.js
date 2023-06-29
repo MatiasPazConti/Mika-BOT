@@ -9,10 +9,10 @@ module.exports = (client) => {
     eventFiles.sort((a, b) => a > b);
 
     const eventName = eventFolder.replace(/\\/g, "/").split("/").pop();
-    client.on(eventName, async (actor) => {
+    client.on(eventName, async (...args) => {
       for (const eventFile of eventFiles) {
         const eventFunction = require(eventFile);
-        await eventFunction(client, actor);
+        await eventFunction(...args, client);
       }
     });
   }

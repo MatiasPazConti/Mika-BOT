@@ -57,7 +57,7 @@ const createWelcomeCanvas = async (member) => {
   return welcomeCanvas;
 };
 
-module.exports = async (client, member) => {
+module.exports = async (member, client) => {
   let welcome = await Welcome.findOne({
     guildId: member.guild.id,
   });
@@ -87,7 +87,8 @@ module.exports = async (client, member) => {
     .setTitle(`¡Bienvenido/a ${userTag[0]}!`)
     .setDescription(welcomeMsg)
     .setColor("#F2C4DE")
-    .setImage(`attachment://welcome-${member.id}.png`);
+    .setImage(`attachment://welcome-${member.id}.png`)
+    .setTimestamp();
 
   try {
     client.channels.cache.get(welcome.discordChannelId).send({

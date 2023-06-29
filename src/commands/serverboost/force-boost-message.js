@@ -76,7 +76,7 @@ module.exports = {
   permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.SendMessages],
 
-  callback: async (client, interaction) => {
+  callback: async (interaction, client) => {
     interaction.deferReply();
     interaction.deleteReply();
 
@@ -111,7 +111,8 @@ module.exports = {
         .setTitle(`¡Gracias ${userTag[0]}!`)
         .setDescription(thanksMsg)
         .setColor("#F2C4DE")
-        .setImage(`attachment://serverBoost-${member.id}.png`);
+        .setImage(`attachment://serverBoost-${member.id}.png`)
+        .setTimestamp();
 
       try {
         client.channels.cache.get(serverBoost.discordChannelId).send({

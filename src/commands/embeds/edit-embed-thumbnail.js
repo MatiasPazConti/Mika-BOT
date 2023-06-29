@@ -30,7 +30,7 @@ module.exports = {
   permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.SendMessages],
 
-  callback: async (client, interaction) => {
+  callback: async (interaction, client) => {
     if (!interaction.inGuild()) {
       interaction.reply({
         content: "Este comando solo puede usarse en servidores.",

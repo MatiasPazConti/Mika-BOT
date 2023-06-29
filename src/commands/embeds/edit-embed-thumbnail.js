@@ -5,7 +5,7 @@ const {
 } = require("discord.js");
 
 module.exports = {
-  name: "add-embed-field",
+  name: "edit-embed-thumbnail",
   description: "Descripción",
   options: [
     {
@@ -21,14 +21,8 @@ module.exports = {
       required: true,
     },
     {
-      name: "título",
-      description: "Ingrese un título para la nueva sección.",
-      type: ApplicationCommandOptionType.String,
-      required: true,
-    },
-    {
-      name: "descripción",
-      description: "Ingrese una descripción para la nueva sección.",
+      name: "thumbnail",
+      description: "Ingrese el enlace del nuevo thumbnail para el Embed.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
@@ -50,22 +44,12 @@ module.exports = {
 
       const channelId = interaction.options.get("canal").value;
       const messageId = interaction.options.get("mensaje").value;
-      const fieldTitle = interaction.options.get("título").value;
-      const fieldDescription = interaction.options.get("descripción").value;
-
-      let newDescription = "";
-      const nArray = fieldDescription.toString().split("/n ");
-      for (let n = 0; n < nArray.length; ++n) {
-        if (n > 0) {
-          newDescription = newDescription + "\n";
-        }
-        newDescription = newDescription + nArray[n];
-      }
+      const newThumbnail = interaction.options.get("thumbnail").value;
 
       const channel = client.channels.cache.get(channelId);
       const message = await channel.messages.fetch(messageId);
       const msgEmbed = message.embeds[0];
-      msgEmbed.addField(fieldTitle, newDescription);
+      msgEmbed.setThumbnail(newThumbnail);
 
       message.edit({ embeds: [msgEmbed] });
 

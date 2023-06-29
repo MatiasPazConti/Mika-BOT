@@ -16,19 +16,37 @@ module.exports = {
     },
     {
       name: "título",
-      description: "Ingrese el título del Embed.",
+      description: "Ingrese un título para el Embed.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
     {
       name: "descripción",
-      description: "Ingrese la descripción del Embed.",
+      description: "Ingrese una descripción para el Embed.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
     {
       name: "color",
-      description: "Ingrese el valor HEX del color del Embed.",
+      description: "Ingrese un valor HEX para el color del Embed.",
+      type: ApplicationCommandOptionType.String,
+      required: false,
+    },
+    {
+      name: "imagen",
+      description: "Ingrese el enlace de la imagen para el Embed.",
+      type: ApplicationCommandOptionType.String,
+      required: false,
+    },
+    {
+      name: "thumbnail",
+      description: "Ingrese el enlace del thumbnail para el Embed.",
+      type: ApplicationCommandOptionType.String,
+      required: false,
+    },
+    {
+      name: "footer",
+      description: "Ingrese una descripción para el pie del Embed.",
       type: ApplicationCommandOptionType.String,
       required: false,
     },
@@ -52,9 +70,9 @@ module.exports = {
       const embedTitle = interaction.options.get("título").value;
       const embedDescription = interaction.options.get("descripción").value;
       const embedColor = interaction.options.get("color")?.value || "#F2C4DE";
-      const embedImage = interaction.options.get("imagen")?.value || "";
-      const embedThumbnail = interaction.options.get("thumbnail")?.value || "";
-      const embedFooter = interaction.options.get("footer")?.value || "";
+      const embedImage = interaction.options.get("imagen")?.value;
+      const embedThumbnail = interaction.options.get("thumbnail")?.value;
+      const embedFooter = interaction.options.get("footer")?.value;
 
       let newDescription = "";
       const nArray = embedDescription.toString().split("/n ");

@@ -4,11 +4,11 @@ const {
   Interaction,
   PermissionFlagsBits,
 } = require("discord.js");
-const Welcome = require("../../models/Welcome");
+const ServerBoost = require("../../models/ServerBoost");
 
 module.exports = {
-  name: "set-welcome-message",
-  description: "Modifica la descripción del auto-mensaje de bienvenida.",
+  name: "set-boost-message",
+  description: "Modifica la descripción del auto-mensaje de agradecimiento.",
   options: [
     {
       name: "mensaje",
@@ -30,24 +30,23 @@ module.exports = {
       return;
     }
 
-    const welcomeMsg = interaction.options.get("mensaje").value;
+    const thanksMsg = interaction.options.get("mensaje").value;
 
     try {
       await interaction.deferReply();
 
-      let welcome = await Welcome.findOne({
+      let serverBoost = await ServerBoost.findOne({
         guildId: interaction.guild.id,
       });
 
-      if (welcome) {
-        welcome.welcomeMessage = welcomeMsg;
-        await welcome.save();
+      if (serverBoost) {
+        serverBoost.thanksMessage = thanksMsg;
+        await serverBoost.save();
 
         interaction.editReply({
           content:
-            `Se ha modificado exitosamente el mensaje de bienvenida a:\n` +
-            `¡Bienvenido/a ${interaction.member}, soy <@1108378229439483945>!\n` +
-            `${welcomeMsg}`,
+            `Se ha modificado exitosamente el mensaje de agradecimiento:\n` +
+            `${thanksMsg}`,
           ephemeral: true,
         });
         return;
@@ -56,13 +55,13 @@ module.exports = {
       interaction.editReply({
         content:
           `Lo siento, no hay ningún canal de bienvenida registrado en mi base de datos.\n` +
-          "Para registrarlo, use el comando ``/set-welcome-channel``.",
+          "Para registrarlo, use el comando ``/set-boost-channel``.",
         ephemeral: true,
       });
       return;
     } catch (error) {
       console.error(
-        `Hubo un error con el comando '/set-welcome-message':\n${error}`
+        `Hubo un error con el comando '/set-boost-message':\n${error}`
       );
     }
   },

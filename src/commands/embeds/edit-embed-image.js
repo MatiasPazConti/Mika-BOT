@@ -3,9 +3,10 @@ const {
   ApplicationCommandOptionType,
   EmbedBuilder,
 } = require("discord.js");
+const Canvas = require("canvas");
 
 module.exports = {
-  name: "add-embed-field",
+  name: "edit-embed-image",
   description: "Descripción",
   options: [
     {
@@ -21,14 +22,8 @@ module.exports = {
       required: true,
     },
     {
-      name: "título",
-      description: "Ingrese un título para la nueva sección.",
-      type: ApplicationCommandOptionType.String,
-      required: true,
-    },
-    {
-      name: "descripción",
-      description: "Ingrese una descripción para la nueva sección.",
+      name: "imagen",
+      description: "Ingrese el enlace de la nueva imagen para el Embed.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
@@ -50,32 +45,19 @@ module.exports = {
 
       const channelId = interaction.options.get("canal").value;
       const messageId = interaction.options.get("mensaje").value;
-      const fieldTitle = interaction.options.get("título").value;
-      const fieldDescription = interaction.options.get("descripción").value;
-
-      let newDescription = "";
-      const nArray = fieldDescription.toString().split("/n ");
-      for (let n = 0; n < nArray.length; ++n) {
-        if (n > 0) {
-          newDescription = newDescription + "\n";
-        }
-        newDescription = newDescription + nArray[n];
-      }
+      const newImage = interaction.options.get("imagen").value;
 
       const channel = client.channels.cache.get(channelId);
       const message = await channel.messages.fetch(messageId);
       const originalEmbed = message.embeds[0];
 
       const newEmbed = new EmbedBuilder()
-        .setTitle(originalEmbed.title)
+        .setTitle(originalEmbed.tlitle)
         .setDescription(originalEmbed.description)
         .setColor(originalEmbed.color)
         .setTimestamp()
-        .addField(fieldTitle, newDescription);
+        .setImage(newImage);
 
-      if (originalEmbed.image) {
-        newEmbed.setImage(originalEmbed.image);
-      }
       if (originalEmbed.thumbnail) {
         newEmbed.setThumbnail(`${originalEmbed.thumbnail}`);
       }

@@ -22,7 +22,7 @@ const getLatestVideoId = async (channelId) => {
   }
 };
 
-module.exports = async (client, interaction) => {
+module.exports = async (client) => {
   setInterval(async () => {
     const guildIds = client.guilds.cache.map((guild) => guild.id);
 

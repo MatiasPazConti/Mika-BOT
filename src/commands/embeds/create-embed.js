@@ -16,19 +16,31 @@ module.exports = {
     },
     {
       name: "título",
-      description: "Ingrese el título del Embed.",
+      description: "Ingrese un título para el Embed.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
     {
       name: "descripción",
-      description: "Ingrese la descripción del Embed.",
+      description: "Ingrese una descripción para el Embed.",
       type: ApplicationCommandOptionType.String,
       required: true,
     },
     {
       name: "color",
-      description: "Ingrese el valor HEX del color del Embed.",
+      description: "Ingrese un valor HEX para el color del Embed.",
+      type: ApplicationCommandOptionType.String,
+      required: false,
+    },
+    {
+      name: "imagen",
+      description: "Ingrese el enlace de la imagen para el Embed.",
+      type: ApplicationCommandOptionType.String,
+      required: false,
+    },
+    {
+      name: "thumbnail",
+      description: "Ingrese el enlace del thumbnail para el Embed.",
       type: ApplicationCommandOptionType.String,
       required: false,
     },
@@ -36,7 +48,7 @@ module.exports = {
   permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.SendMessages],
 
-  callback: async (client, interaction) => {
+  callback: async (interaction, client) => {
     if (!interaction.inGuild()) {
       interaction.reply({
         content: "Este comando solo puede usarse en servidores.",
@@ -52,9 +64,8 @@ module.exports = {
       const embedTitle = interaction.options.get("título").value;
       const embedDescription = interaction.options.get("descripción").value;
       const embedColor = interaction.options.get("color")?.value || "#F2C4DE";
-      const embedImage = interaction.options.get("imagen")?.value || "";
-      const embedThumbnail = interaction.options.get("thumbnail")?.value || "";
-      const embedFooter = interaction.options.get("footer")?.value || "";
+      const embedImage = interaction.options.get("imagen")?.value;
+      const embedThumbnail = interaction.options.get("thumbnail")?.value;
 
       let newDescription = "";
       const nArray = embedDescription.toString().split("/n ");
@@ -76,12 +87,6 @@ module.exports = {
       }
       if (embedThumbnail) {
         newEmbed.setThumbnail(`${embedThumbnail}`);
-      }
-      if (embedFooter) {
-        newEmbed.setFooter({
-          text: `${embedFooter}`,
-          iconURL: interaction.member.displayAvatarURL({ dynamic: true }),
-        });
       }
 
       client.channels.cache.get(channelId).send({ embeds: [newEmbed] });

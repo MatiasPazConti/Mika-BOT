@@ -1,8 +1,9 @@
 const {
   PermissionFlagsBits,
   ApplicationCommandOptionType,
-  MessageEmbed,
+  EmbedBuilder,
 } = require("discord.js");
+const Canvas = require("canvas");
 
 module.exports = {
   name: "edit-embed-image",
@@ -48,10 +49,20 @@ module.exports = {
 
       const channel = client.channels.cache.get(channelId);
       const message = await channel.messages.fetch(messageId);
-      const msgEmbed = message.embeds[0];
-      msgEmbed.setImage(newImage);
+      const originalEmbed = message.embeds[0];
 
-      message.edit({ embeds: [msgEmbed] });
+      const newEmbed = new EmbedBuilder()
+        .setTitle(originalEmbed.tlitle)
+        .setDescription(originalEmbed.description)
+        .setColor(originalEmbed.color)
+        .setTimestamp()
+        .setImage(newImage);
+
+      if (originalEmbed.thumbnail) {
+        newEmbed.setThumbnail(`${originalEmbed.thumbnail}`);
+      }
+
+      message.edit({ embeds: [newEmbed] });
 
       await interaction.deleteReply();
     } catch (error) {

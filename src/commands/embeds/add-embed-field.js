@@ -1,7 +1,7 @@
 const {
   PermissionFlagsBits,
   ApplicationCommandOptionType,
-  MessageEmbed,
+  EmbedBuilder,
 } = require("discord.js");
 
 module.exports = {
@@ -64,10 +64,23 @@ module.exports = {
 
       const channel = client.channels.cache.get(channelId);
       const message = await channel.messages.fetch(messageId);
-      const msgEmbed = message.embeds[0];
-      msgEmbed.addField(fieldTitle, newDescription);
+      const originalEmbed = message.embeds[0];
 
-      message.edit({ embeds: [msgEmbed] });
+      const newEmbed = new EmbedBuilder()
+        .setTitle(originalEmbed.title)
+        .setDescription(originalEmbed.description)
+        .setColor(originalEmbed.color)
+        .setTimestamp()
+        .addField(fieldTitle, newDescription);
+
+      if (originalEmbed.image) {
+        newEmbed.setImage(originalEmbed.image);
+      }
+      if (originalEmbed.thumbnail) {
+        newEmbed.setThumbnail(`${originalEmbed.thumbnail}`);
+      }
+
+      message.edit({ embeds: [newEmbed] });
 
       await interaction.deleteReply();
     } catch (error) {

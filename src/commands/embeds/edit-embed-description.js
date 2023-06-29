@@ -1,7 +1,7 @@
 const {
   PermissionFlagsBits,
   ApplicationCommandOptionType,
-  MessageEmbed,
+  EmbedBuilder,
 } = require("discord.js");
 
 module.exports = {
@@ -44,10 +44,10 @@ module.exports = {
 
       const channelId = interaction.options.get("canal").value;
       const messageId = interaction.options.get("mensaje").value;
-      const embedDescription = interaction.options.get("descripción").value;
+      const rawDescription = interaction.options.get("descripción").value;
 
       let newDescription = "";
-      const nArray = embedDescription.toString().split("/n ");
+      const nArray = rawDescription.toString().split("/n ");
       for (let n = 0; n < nArray.length; ++n) {
         if (n > 0) {
           newDescription = newDescription + "\n";
@@ -57,10 +57,22 @@ module.exports = {
 
       const channel = client.channels.cache.get(channelId);
       const message = await channel.messages.fetch(messageId);
-      const msgEmbed = message.embeds[0];
-      msgEmbed.setDescription(newDescription);
+      const originalEmbed = message.embeds[0];
 
-      message.edit({ embeds: [msgEmbed] });
+      const newEmbed = new EmbedBuilder()
+        .setTitle(originalEmbed.title)
+        .setDescription(newDescription)
+        .setColor(originalEmbed.color)
+        .setTimestamp();
+
+      if (originalEmbed.image) {
+        newEmbed.setImage(originalEmbed.image);
+      }
+      if (originalEmbed.thumbnail) {
+        newEmbed.setThumbnail(`${originalEmbed.thumbnail}`);
+      }
+
+      message.edit({ embeds: [newEmbed] });
 
       await interaction.deleteReply();
     } catch (error) {

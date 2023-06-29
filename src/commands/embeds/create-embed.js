@@ -44,12 +44,6 @@ module.exports = {
       type: ApplicationCommandOptionType.String,
       required: false,
     },
-    {
-      name: "footer",
-      description: "Ingrese una descripción para el pie del Embed.",
-      type: ApplicationCommandOptionType.String,
-      required: false,
-    },
   ],
   permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.SendMessages],
@@ -72,7 +66,6 @@ module.exports = {
       const embedColor = interaction.options.get("color")?.value || "#F2C4DE";
       const embedImage = interaction.options.get("imagen")?.value;
       const embedThumbnail = interaction.options.get("thumbnail")?.value;
-      const embedFooter = interaction.options.get("footer")?.value;
 
       let newDescription = "";
       const nArray = embedDescription.toString().split("/n ");
@@ -94,12 +87,6 @@ module.exports = {
       }
       if (embedThumbnail) {
         newEmbed.setThumbnail(`${embedThumbnail}`);
-      }
-      if (embedFooter) {
-        newEmbed.setFooter({
-          text: `${embedFooter}`,
-          iconURL: interaction.member.displayAvatarURL({ dynamic: true }),
-        });
       }
 
       client.channels.cache.get(channelId).send({ embeds: [newEmbed] });

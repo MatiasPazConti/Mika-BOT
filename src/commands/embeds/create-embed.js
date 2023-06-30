@@ -64,7 +64,7 @@ module.exports = {
       const embedTitle = interaction.options.get("título").value;
       const embedDescription = interaction.options.get("descripción").value;
       const embedColor = interaction.options.get("color")?.value || "#F2C4DE";
-      const embedImage = interaction.options.get("imagen")?.value;
+      const embedImageUrl = interaction.options.get("imagen")?.value;
       const embedThumbnail = interaction.options.get("thumbnail")?.value;
 
       let newDescription = "";
@@ -82,8 +82,8 @@ module.exports = {
         .setColor(`${embedColor}`)
         .setTimestamp();
 
-      if (embedImage) {
-        newEmbed.setImage(embedImage);
+      if (embedImageUrl) {
+        newEmbed.setImage(embedImageUrl);
       }
       if (embedThumbnail) {
         newEmbed.setThumbnail(`${embedThumbnail}`);
@@ -93,7 +93,7 @@ module.exports = {
 
       await interaction.deleteReply();
     } catch (error) {
-      console.log(`Hubo un error enviando el Embed:\n${error}`);
+      console.log("Hubo un error enviando el Embed:\n", error);
     }
   },
 };

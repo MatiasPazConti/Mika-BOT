@@ -17,8 +17,9 @@ const getLatestVideoId = async (channelId) => {
 
     return response.data.items[0].id.videoId;
   } catch (error) {
-    console.error(
-      `YouTube-Notifications: Hubo un error intentando acceder a la información del canal:\n${error}`
+    console.log(
+      "YouTube-Notifications: Hubo un error intentando acceder a la información del canal",
+      error
     );
   }
 };
@@ -104,7 +105,8 @@ module.exports = {
       interaction.deleteReply();
     } catch (error) {
       console.error(
-        `Hubo un error con el comando: /test-youtube-notification\n${error}`
+        "Hubo un error con el comando: /test-youtube-notification\n",
+        error
       );
     }
   },

@@ -57,17 +57,17 @@ module.exports = {
         .setTimestamp();
 
       if (originalEmbed.image) {
-        newEmbed.setImage(originalEmbed.image);
+        newEmbed.setImage(originalEmbed.image.url);
       }
       if (originalEmbed.thumbnail) {
-        newEmbed.setThumbnail(`${originalEmbed.thumbnail}`);
+        newEmbed.setThumbnail(`${originalEmbed.thumbnail.url}`);
       }
 
       message.edit({ embeds: [newEmbed] });
 
       await interaction.deleteReply();
     } catch (error) {
-      console.log(`Hubo un error enviando el Embed:\n${error}`);
+      console.log("Hubo un error enviando el Embed:\n", error);
     }
   },
 };

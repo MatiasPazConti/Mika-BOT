@@ -22,13 +22,8 @@ const getTwitchAccess = async () => {
       console.error("Hubo un error obteniendo el ACCESS_TOKEN:\n", error);
       return data;
     }
-  } catch {
-    (error) => {
-      console.error(
-        "Hubo un error intentando obtener el ACCESS_TOKEN:\n",
-        error
-      );
-    };
+  } catch (error) {
+    console.error("Hubo un error intentando obtener el ACCESS_TOKEN:\n", error);
   }
 };
 
@@ -46,7 +41,8 @@ const isChannelOnline = async (channelId) => {
     return data.length !== 0;
   } catch (error) {
     console.error(
-      `Twitch-Notifications: Hubo un error intentando acceder a la información del canal:\n${error}`
+      "Twitch-Notifications: Hubo un error intentando acceder a la información del canal\n",
+      error
     );
   }
 };
@@ -132,7 +128,8 @@ module.exports = {
       interaction.deleteReply();
     } catch (error) {
       console.error(
-        `Hubo un error con el comando: /test-twitch-notification\n${error}`
+        "Hubo un error con el comando: /test-twitch-notification\n",
+        error
       );
     }
   },

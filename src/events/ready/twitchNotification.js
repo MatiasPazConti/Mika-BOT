@@ -83,24 +83,24 @@ module.exports = async (client) => {
             twitchNotification.save();
           }
           return;
+        } else if (!twitchNotification.online) {
+          let notificationMsg = "¡Nuevo directo!";
+          if (twitchNotification.messageContent) {
+            notificationMsg = twitchNotification.messageContent;
+          }
+
+          if (twitchNotification.tagRoleId) {
+            notificationMsg = `<@&${twitchNotification.tagRoleId}> ${notificationMsg}`;
+          }
+
+          notificationMsg = `${notificationMsg}\nhttps://www.twitch.tv/${twitchNotification.twitchChannelId}`;
+          client.channels.cache
+            .get(twitchNotification.discordChannelId)
+            .send(notificationMsg);
+
+          twitchNotification.online = true;
+          twitchNotification.save();
         }
-
-        let notificationMsg = "¡Nuevo directo!";
-        if (twitchNotification.messageContent) {
-          notificationMsg = twitchNotification.messageContent;
-        }
-
-        if (twitchNotification.tagRoleId) {
-          notificationMsg = `<@&${twitchNotification.tagRoleId}> ${notificationMsg}`;
-        }
-
-        notificationMsg = `${notificationMsg}\nhttps://www.twitch.tv/${twitchNotification.twitchChannelId}`;
-        client.channels.cache
-          .get(twitchNotification.discordChannelId)
-          .send(notificationMsg);
-
-        twitchNotification.online = true;
-        twitchNotification.save();
       }
 
       twitchNotifications.length = 0;

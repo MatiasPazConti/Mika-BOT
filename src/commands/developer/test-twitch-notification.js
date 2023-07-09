@@ -101,7 +101,7 @@ module.exports = {
               twitchNotification.online = false;
               twitchNotification.save();
             }
-          } else {
+          } else if (!twitchNotification.online) {
             let notificationMsg = "¡Nuevo directo!";
             if (twitchNotification.messageContent) {
               notificationMsg = twitchNotification.messageContent;

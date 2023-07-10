@@ -62,5 +62,5 @@ module.exports = async (client) => {
     }
 
     guildIds.length = 0;
-  }, 5000 /*1200000*/); //20 minutos = 1.200.000
+  }, 1200000); //20 minutos = 1.200.000
 };

@@ -1,26 +1,34 @@
+const { PermissionFlagsBits } = require("discord.js");
 const TwitchNotification = require("../../models/TwitchNotification");
 const isTwitchChannelOnline = require("../../utils/isTwitchChannelOnline");
 
-module.exports = async (client) => {
-  setInterval(async () => {
-    const guildIds = client.guilds.cache.map((guild) => guild.id);
+module.exports = {
+  name: "force-twitch-notification",
+  description: "Fuerza el evento READY: twitchNotifications.",
+  permissionsRequired: [PermissionFlagsBits.Administrator],
+  botPermissions: [PermissionFlagsBits.SendMessages],
 
-    if (guildIds.length === 0) {
-      console.error(
-        "Twitch-Notifications: La función no se ha configurado para ningún servidor."
-      );
+  callback: async (interaction, client) => {
+    if (!interaction.inGuild()) {
+      interaction.reply({
+        content: "Lo siento, este comando solo puede usarse en servidores.",
+        ephemeral: true,
+      });
       return;
     }
 
-    for (const guildId of guildIds) {
+    try {
+      await interaction.deferReply();
+
       const twitchNotifications = await TwitchNotification.find({
-        guildId: guildId,
+        guildId: interaction.guild.id,
       });
 
       if (twitchNotifications.length === 0) {
         console.log(
           `Twitch-Notifications: La función no se ha configurado para el servidor ${guildId}`
         );
+        interaction.deleteReply();
         return;
       }
 
@@ -37,7 +45,6 @@ module.exports = async (client) => {
             twitchNotification.online = false;
             twitchNotification.save();
           }
-          return;
         } else if (!twitchNotification.online) {
           let notificationMsg = "¡Nuevo directo!";
           if (twitchNotification.messageContent) {
@@ -59,8 +66,13 @@ module.exports = async (client) => {
       }
 
       twitchNotifications.length = 0;
-    }
 
-    guildIds.length = 0;
-  }, 5000 /*1200000*/); //20 minutos = 1.200.000
+      interaction.deleteReply();
+    } catch (error) {
+      console.error(
+        "Hubo un error con el comando: /test-twitch-notification\n",
+        error
+      );
+    }
+  },
 };

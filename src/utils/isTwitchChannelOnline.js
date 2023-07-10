@@ -17,7 +17,7 @@ const getTwitchAccess = async () => {
     if (data.access_token) {
       return data.access_token;
     } else {
-      console.error("Hubo un error obteniendo el ACCESS_TOKEN:\n", error);
+      console.error("Hubo un error obteniendo el ACCESS_TOKEN:\n", data);
       return data;
     }
   } catch (error) {

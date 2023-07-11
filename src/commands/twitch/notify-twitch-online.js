@@ -32,31 +32,39 @@ module.exports = {
     try {
       await interaction.deferReply();
 
-      const twitchNotification = await TwitchNotification.find({
+      const twitchNotifications = await TwitchNotification.find({
         guildId: interaction.guild.id,
         twitchChannelId: twitchId,
       });
 
-      let notificationMsg = "¡Nuevo directo!";
-      if (twitchNotification.messageContent) {
-        notificationMsg = twitchNotification.messageContent;
-      }
+      for (twitchNotification of twitchNotifications) {
+        console.log(twitchNotification);
+        let notificationMsg = "¡Nuevo directo!";
+        if (twitchNotification.messageContent) {
+          notificationMsg = twitchNotification.messageContent;
+        }
 
-      if (twitchNotification.tagRoleId) {
-        notificationMsg = `<@&${twitchNotification.tagRoleId}> ${notificationMsg}`;
-      }
+        if (twitchNotification.tagRoleId) {
+          notificationMsg = `<@&${twitchNotification.tagRoleId}> ${notificationMsg}`;
+        }
 
-      notificationMsg = `${notificationMsg}\nhttps://www.twitch.tv/${twitchNotification.twitchChannelId}`;
-      client.channels.cache
-        .get(twitchNotification.discordChannelId)
-        .send(notificationMsg);
+        notificationMsg = `${notificationMsg}\nhttps://www.twitch.tv/${twitchNotification.twitchChannelId}`;
+
+        console.log(notificationMsg);
+
+        client.channels.cache
+          .get(twitchNotification.discordChannelId)
+          .send(notificationMsg);
+      }
 
       interaction.deleteReply();
     } catch (error) {
       console.error(
-        "Hubo un error con el comando: /test-twitch-notification\n",
+        "Hubo un error con el comando: /notify-twitch-notification\n",
         error
       );
+
+      interaction.deleteReply();
     }
   },
 };

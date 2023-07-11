@@ -1,26 +1,5 @@
-require("dotenv").config();
 const YoutubeNotification = require("../../models/YoutubeNotification");
-const { google } = require("googleapis");
-const Youtube = google.youtube("v3");
-
-const getLatestVideoId = async (channelId) => {
-  try {
-    const response = await Youtube.search.list({
-      key: process.env.YOUTUBE_TOKEN,
-      part: "id",
-      channelId: channelId,
-      type: "video",
-      order: "date",
-      maxResults: 1,
-    });
-
-    return response.data.items[0].id.videoId;
-  } catch (error) {
-    console.error(
-      `YouTube-Notifications: Hubo un error intentando acceder a la información del canal:\n${error}`
-    );
-  }
-};
+const getLatestVideoId = require("../../utils/getLatestVideoId");
 
 module.exports = async (client) => {
   setInterval(async () => {

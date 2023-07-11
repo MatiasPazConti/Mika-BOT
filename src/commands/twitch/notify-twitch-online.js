@@ -1,6 +1,8 @@
-const { PermissionFlagsBits } = require("discord.js");
+const {
+  PermissionFlagsBits,
+  ApplicationCommandOptionType,
+} = require("discord.js");
 const TwitchNotification = require("../../models/TwitchNotification");
-const isTwitchChannelOnline = require("../../utils/isTwitchChannelOnline");
 
 module.exports = {
   name: "notify-twitch-online",

@@ -4,7 +4,7 @@ const isTwitchChannelOnline = require("../../utils/isTwitchChannelOnline");
 
 module.exports = {
   name: "force-twitch-notification",
-  description: "Fuerza el evento READY: twitchNotifications.",
+  description: "Operación fuera de servicio",
   permissionsRequired: [PermissionFlagsBits.Administrator],
   botPermissions: [PermissionFlagsBits.SendMessages],
 
@@ -17,6 +17,7 @@ module.exports = {
       return;
     }
 
+    return;
     try {
       await interaction.deferReply();
 

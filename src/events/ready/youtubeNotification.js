@@ -29,6 +29,13 @@ module.exports = async (client) => {
           youtubeNotification.youtubeChannelId
         );
 
+        if (!latestVideoId) {
+          console.log(
+            `YouTube-Notifications: No se pudo obtener el último ID registrado`
+          );
+          return;
+        }
+
         if (!youtubeNotification.latestVideoId) {
           console.log(
             `YouTube-Notifications: No se pudo obtener el ID del último video del canal ${youtubeNotification.youtubeChannelId}`
@@ -37,6 +44,7 @@ module.exports = async (client) => {
         }
 
         if (youtubeNotification.latestVideoId === latestVideoId) {
+          console.log(`YouTube-Notifications: ID repetido ${latestVideoId}`);
           return;
         }
 

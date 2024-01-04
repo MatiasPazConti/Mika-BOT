@@ -43,9 +43,8 @@ module.exports = async (client) => {
           )
         ) {
           console.log(
-            `YouTube-Notifications: No se pudo obtener el ID del último video del canal ${youtubeNotification.youtubeChannelId}`
+            `YouTube-Notifications: No hay IDs de video registradas para el canal ${youtubeNotification.youtubeChannelId}`
           );
-          return;
         }
 
         if (

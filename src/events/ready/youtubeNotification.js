@@ -36,14 +36,30 @@ module.exports = async (client) => {
           return;
         }
 
-        if (!youtubeNotification.latestVideoId) {
+        if (
+          !(
+            youtubeNotification.latestVideoId1 ||
+            youtubeNotification.latestVideoId2
+          )
+        ) {
           console.log(
             `YouTube-Notifications: No se pudo obtener el ID del último video del canal ${youtubeNotification.youtubeChannelId}`
           );
           return;
         }
 
-        if (youtubeNotification.latestVideoId === latestVideoId) {
+        if (
+          youtubeNotification.latestVideoId1 &&
+          youtubeNotification.latestVideoId1 === latestVideoId
+        ) {
+          console.log(`YouTube-Notifications: ID repetido ${latestVideoId}`);
+          return;
+        }
+
+        if (
+          youtubeNotification.latestVideoId2 &&
+          youtubeNotification.latestVideoId2 === latestVideoId
+        ) {
           console.log(`YouTube-Notifications: ID repetido ${latestVideoId}`);
           return;
         }
@@ -62,7 +78,8 @@ module.exports = async (client) => {
           .get(youtubeNotification.discordChannelId)
           .send(notificationMsg);
 
-        youtubeNotification.latestVideoId = latestVideoId;
+        youtubeNotification.latestVideoId2 = youtubeNotification.latestVideoId1;
+        youtubeNotification.latestVideoId1 = latestVideoId;
         await youtubeNotification.save();
       }
 

@@ -16,7 +16,12 @@ const youtubeNotificationSchema = new Schema({
     required: true,
     unique: true,
   },
-  latestVideoId: {
+  latestVideoId1: {
+    type: String,
+    required: false,
+    unique: false,
+  },
+  latestVideoId2: {
     type: String,
     required: false,
     unique: false,
